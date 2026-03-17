@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal BYOD Studios</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        font-family: 'Roboto Mono', monospace;
+        background-color: #0d0d0d;
+        color: #e0e0e0;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        background: linear-gradient(90deg, #0f0f0f, #1a1a1a);
+        border-bottom: 1px solid #222;
+        box-shadow: 0 2px 10px rgba(0,255,255,0.1);
+    }
+    header .user-info {
+        font-size: 14px;
+        color: #00ffff;
+    }
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 60px);
+        flex-direction: column;
+    }
+    .login-container, .apps-container, .loading-container {
+        background-color: #121212;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,255,255,0.2);
+        width: 350px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .login-container h1, .apps-container h1, .loading-container h1 {
+        color: #00ffff;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+    }
+    .login-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #0ff;
+    }
+    .login-container input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border: 1px solid #00ffff;
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+        font-size: 14px;
+    }
+    .login-container input:focus {
+        outline: none;
+        border-color: #0ff;
+        box-shadow: 0 0 10px #00ffff;
+    }
+    .login-container button {
+        width: 100%;
+        padding: 12px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #0d0d0d;
+        background-color: #00ffff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .login-container button:hover {
+        background-color: #00cccc;
+        box-shadow: 0 0 15px #00ffff;
+    }
+    .apps-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .apps-list button {
+        background-color: #1a1a1a;
+        color: #0ff;
+        border: 2px solid #00ffff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        width: 80%;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .apps-list button:hover {
+        background-color: #00ffff;
+        color: #0d0d0d;
+        box-shadow: 0 0 15px #00ffff;
+    }
+    .hidden { display: none; }
+
+    /* Lade-Animation */
+    .loader {
+        border: 5px solid #121212;
+        border-top: 5px solid #00ffff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg);}
+        100% { transform: rotate(360deg);}
+    }
+</style>
+</head>
+<body>
+<header>
+    <div>Portal BYOD Studios</div>
+    <div class="user-info">Angemeldet: —</div>
+</header>
+<main>
+    <div class="login-container" id="loginContainer">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label for="username">Benutzername</label>
+            <input type="text" id="username" name="username" placeholder="Ihr Benutzername" required>
+            
+            <label for="password">Passwort</label>
+            <input type="password" id="password" name="password" placeholder="Ihr Passwort" required>
+            
+            <button type="submit">Anmelden</button>
+        </form>
+    </div>
+
+    <div class="loading-container hidden" id="loadingContainer">
+        <h1>Laden der Apps...</h1>
+        <div class="loader"></div>
+    </div>
+
+    <div class="loading-container hidden" id="appOpenContainer">
+        <h1>Öffnen der Ressource...</h1>
+        <div class="loader"></div>
+    </div>
+
+    <div class="apps-container hidden" id="appsContainer">
+        <h1>Ihre Apps</h1>
+        <div class="apps-list" id="appsList">
+            <!-- Buttons für Apps -->
+        </div>
+    </div>
+</main>
+
+<script>
+const users = [
+    { username: "max.mustermann", password: "Passwort123", vorname: "Max", nachname: "Mustermann", apps: [
+        {name: "BYOD Mail", url: "https://mail.example.com"},
+        {name: "Intranet", url: "https://byodit1.bitrix24.de"},
+        {name: "UserHelpDesk", url: "https://byodstudios.onepage.me/userhelpdesk"}
+    ]},
+    { username: "61128323", password: "Indoorcycling2026!", vorname: "Louis", nachname: "Schwickert", apps: [ 
+	{name: "userhelpdesk", url: "https://byodstudios.onepage.me/userhelpdesk"},
+	{name: "Intranet", url: "https://byodit1.bitrix24.de"}
+    ] },
+    { username: "tom.mueller", password: "TestPW789", vorname: "Tom", nachname: "Müller", apps: [] }
+];
+
+const loginForm = document.getElementById('loginForm');
+const loginContainer = document.getElementById('loginContainer');
+const loadingContainer = document.getElementById('loadingContainer');
+const appsContainer = document.getElementById('appsContainer');
+const appsList = document.getElementById('appsList');
+const userInfo = document.querySelector('.user-info');
+const appOpenContainer = document.getElementById('appOpenContainer');
+
+let currentUser = null;
+
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if(user) {
+        currentUser = user;
+        userInfo.textContent = `Angemeldet: ${user.vorname} ${user.nachname}`;
+        loginContainer.classList.add('hidden');
+        loadingContainer.classList.remove('hidden');
+
+        setTimeout(() => {
+            loadingContainer.classList.add('hidden');
+            appsContainer.classList.remove('hidden');
+            displayApps(user.apps);
+        }, 3000);
+    } else {
+        alert('Benutzername oder Passwort ist falsch.');
+    }
+
+    loginForm.reset();
+});
+
+function displayApps(apps) {
+    appsList.innerHTML = "";
+    if(apps.length === 0) {
+        appsList.innerHTML = "Apps: Es sind momentan keine Apps vorhanden";
+        return;
+    }
+    apps.forEach(app => {
+        const btn = document.createElement('button');
+        btn.textContent = app.name;
+        btn.addEventListener('click', () => openApp(app.url));
+        appsList.appendChild(btn);
+    });
+}
+
+function openApp(url) {
+    appsContainer.classList.add('hidden');
+    appOpenContainer.classList.remove('hidden');
+
+    setTimeout(() => {
+        appOpenContainer.classList.add('hidden');
+        appsContainer.classList.remove('hidden');
+        window.open(url, '_blank');
+    }, 10000); // 10 Sekunden
+}
+</script>
+</body>
+</html>
