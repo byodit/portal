@@ -5,139 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal BYOD Studios</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin: 0;
-        font-family: 'Roboto Mono', monospace;
-        background-color: #0d0d0d;
-        color: #e0e0e0;
-    }
+body {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    background-color: #0d0d0d;
+    color: #e0e0e0;
+}
 
-    header {
-        display: flex;
-        flex-direction: column;
-        padding: 15px 30px;
-        background: linear-gradient(90deg, #0f0f0f, #1a1a1a);
-        border-bottom: 1px solid #222;
-        box-shadow: 0 2px 10px rgba(0,255,255,0.1);
-    }
+header {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 30px;
+    background: linear-gradient(90deg, #0f0f0f, #1a1a1a);
+    border-bottom: 1px solid #222;
+}
 
-    .top-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+}
 
-    header .user-info {
-        font-size: 14px;
-        color: #00ffff;
-    }
+.user-info {
+    color: #00ffff;
+}
 
-    /* SUCHLEISTE */
-    .directory {
-        margin-top: 15px;
-        background: #121212;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0,255,255,0.1);
-    }
+/* Mitarbeiterverzeichnis */
+.directory {
+    margin-top: 15px;
+    background: #121212;
+    padding: 15px;
+    border-radius: 12px;
+}
 
-    .directory h2 {
-        margin: 0 0 10px 0;
-        color: #00ffff;
-        font-size: 16px;
-    }
+.directory input {
+    width: 70%;
+    padding: 8px;
+    margin-right: 5px;
+}
 
-    .directory input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #00ffff;
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-    }
+.directory button {
+    padding: 8px 10px;
+    cursor: pointer;
+}
 
-    .employee-list {
-        margin-top: 10px;
-        max-height: 150px;
-        overflow-y: auto;
-        font-size: 13px;
-    }
+.employee {
+    border-bottom: 1px solid #222;
+    padding: 5px;
+    font-size: 13px;
+}
 
-    .employee {
-        padding: 8px;
-        border-bottom: 1px solid #222;
-    }
+.hidden { display: none; }
 
-    .employee span {
-        display: block;
-    }
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 140px);
+    flex-direction: column;
+}
 
-    main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: calc(100vh - 140px);
-        flex-direction: column;
-    }
+.container {
+    background: #121212;
+    padding: 30px;
+    border-radius: 15px;
+    width: 320px;
+    text-align: center;
+}
 
-    .login-container, .apps-container, .loading-container {
-        background-color: #121212;
-        padding: 40px 30px;
-        border-radius: 15px;
-        box-shadow: 0 0 20px rgba(0,255,255,0.2);
-        width: 350px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #00ffff;
+    border: none;
+    cursor: pointer;
+}
 
-    h1 {
-        color: #00ffff;
-    }
+.loader {
+    border: 5px solid #121212;
+    border-top: 5px solid #00ffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
 
-    .login-container input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        border: 1px solid #00ffff;
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        font-weight: bold;
-        background-color: #00ffff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    .apps-list button {
-        margin-bottom: 10px;
-        background-color: #1a1a1a;
-        color: #0ff;
-        border: 2px solid #00ffff;
-    }
-
-    .hidden { display: none; }
-
-    .loader {
-        border: 5px solid #121212;
-        border-top: 5px solid #00ffff;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin: 20px auto;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg);}
-        100% { transform: rotate(360deg);}
-    }
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
 </style>
 </head>
 
@@ -149,122 +107,119 @@
         <div class="user-info">Angemeldet: —</div>
     </div>
 
-    <!-- MITARBEITERVERZEICHNIS -->
-    <div class="directory">
-        <h2>Mitarbeiterverzeichnis</h2>
-        <input type="text" id="searchEmployee" placeholder="Suchen nach Name, Personalnummer, Telefon...">
-        <div class="employee-list" id="employeeList"></div>
+    <!-- VERZEICHNIS (nur nach Login sichtbar) -->
+    <div class="directory hidden" id="directory">
+        <h3>Mitarbeiterverzeichnis</h3>
+        <input type="text" id="searchEmployee" placeholder="Suchen...">
+        <button onclick="searchEmployees()">Suchen</button>
+        <div id="employeeList"></div>
     </div>
 </header>
 
 <main>
 
-    <div class="login-container" id="loginContainer">
-        <h1>Login</h1>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Benutzername" required>
-            <input type="password" id="password" placeholder="Passwort" required>
-            <button type="submit">Anmelden</button>
-        </form>
-    </div>
+<div class="container" id="loginContainer">
+    <h2>Login</h2>
+    <input id="username" placeholder="Benutzername">
+    <input id="password" type="password" placeholder="Passwort">
+    <button onclick="login()">Anmelden</button>
+</div>
 
-    <div class="loading-container hidden" id="loadingContainer">
-        <h1>Laden der Apps...</h1>
-        <div class="loader"></div>
-    </div>
+<div class="container hidden" id="loadingContainer">
+    <h2>Laden...</h2>
+    <div class="loader"></div>
+</div>
 
-    <div class="loading-container hidden" id="appOpenContainer">
-        <h1>Öffnen der Ressource...</h1>
-        <div class="loader"></div>
-    </div>
-
-    <div class="apps-container hidden" id="appsContainer">
-        <h1>Ihre Apps</h1>
-        <div class="apps-list" id="appsList"></div>
-    </div>
+<div class="container hidden" id="appsContainer">
+    <h2>Ihre Apps</h2>
+    <div id="appsList"></div>
+</div>
 
 </main>
 
 <script>
 
-/* USER */
+/* USERS */
 const users = [
-   { username: "61128323", password: "Indoorcycling2026!", vorname: "Louis", nachname: "Schwickert", apps: [ 
-       {name: "userhelpdesk", url: "https://byodstudios.onepage.me/userhelpdesk"}, 
-       {name: "Intranet", url: "https://byodit1.bitrix24.de"}, 
-       {name: "Prüfungsportal - Kandidatenzugang", url: "https://candidate.speedexam.net"} ] }, 
-    
-    { username: "07040934", password: "start123!", vorname: "Tiemo", nachname: "Kroth", apps: [] }
-    ]}
+{ username: "61128323", password: "Indoorcycling2026!", vorname: "Louis", nachname: "Schwickert", apps: [
+    {name: "userhelpdesk", url: "https://byodstudios.onepage.me/userhelpdesk"},
+    {name: "Intranet", url: "https://byodit1.bitrix24.de"},
+    {name: "Prüfungsportal", url: "https://candidate.speedexam.net"}
+]},
+{ username: "07040934", password: "start123!", vorname: "Tiemo", nachname: "Kroth", apps: [] }
 ];
 
-/* MITARBEITER (PLATZHALTER) */
+/* MITARBEITER */
 const employees = [
-    { personalnr: "61128323", vorname: "Louis", nachname: "Schwickert", tel: "015901993688", email: "LSchwickert.BYOD@outlook.de" },
-    { personalnr: "1002", vorname: "Anna", nachname: "Schmidt", tel: "0987654321", email: "anna@firma.de" }
+{ personalnr: "61128323", vorname: "Louis", nachname: "Schwickert", tel: "015901993688", email: "LSchwickert.BYOD@outlook.de" },
+{ personalnr: "07040934", vorname: "Tiemo", nachname: "Kroth", tel: "-", email: "TKroth.BYOD@outlook.de" }
 ];
 
 /* LOGIN */
-const loginForm = document.getElementById('loginForm');
-const loginContainer = document.getElementById('loginContainer');
-const loadingContainer = document.getElementById('loadingContainer');
-const appsContainer = document.getElementById('appsContainer');
-const appsList = document.getElementById('appsList');
-const userInfo = document.querySelector('.user-info');
-
-loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
+function login() {
     const user = users.find(u =>
         u.username === username.value &&
         u.password === password.value
     );
 
     if(user) {
-        userInfo.textContent = `Angemeldet: ${user.vorname} ${user.nachname}`;
-        loginContainer.classList.add('hidden');
-        loadingContainer.classList.remove('hidden');
+        document.querySelector(".user-info").textContent =
+            "Angemeldet: " + user.vorname + " " + user.nachname;
+
+        loginContainer.classList.add("hidden");
+        loadingContainer.classList.remove("hidden");
 
         setTimeout(() => {
-            loadingContainer.classList.add('hidden');
-            appsContainer.classList.remove('hidden');
+            loadingContainer.classList.add("hidden");
+            appsContainer.classList.remove("hidden");
+            directory.classList.remove("hidden");
+            loadApps(user.apps);
         }, 2000);
     } else {
         alert("Login falsch");
     }
-});
+}
 
-/* MITARBEITER SUCHEN */
-const searchInput = document.getElementById("searchEmployee");
-const employeeList = document.getElementById("employeeList");
+/* APPS */
+function loadApps(apps) {
+    const list = document.getElementById("appsList");
+    list.innerHTML = "";
 
-function renderEmployees(list) {
-    employeeList.innerHTML = "";
-    list.forEach(emp => {
-        const div = document.createElement("div");
-        div.className = "employee";
-        div.innerHTML = `
-            <span><b>${emp.vorname} ${emp.nachname}</b> (${emp.personalnr})</span>
-            <span>Tel: ${emp.tel}</span>
-            <span>Email: ${emp.email}</span>
-        `;
-        employeeList.appendChild(div);
+    apps.forEach(app => {
+        const btn = document.createElement("button");
+        btn.textContent = app.name;
+        btn.onclick = () => window.open(app.url);
+        list.appendChild(btn);
     });
 }
 
-searchInput.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    const filtered = employees.filter(emp =>
-        emp.vorname.toLowerCase().includes(value) ||
-        emp.nachname.toLowerCase().includes(value) ||
-        emp.personalnr.includes(value) ||
-        emp.tel.includes(value)
-    );
-    renderEmployees(filtered);
-});
+/* MITARBEITER ANZEIGEN */
+function renderEmployees(list) {
+    const container = document.getElementById("employeeList");
+    container.innerHTML = "";
 
-/* INITIAL */
-renderEmployees(employees);
+    list.forEach(emp => {
+        container.innerHTML += `
+        <div class="employee">
+            <b>${emp.vorname} ${emp.nachname}</b> (${emp.personalnr})<br>
+            Tel: ${emp.tel}<br>
+            Mail: ${emp.email}
+        </div>`;
+    });
+}
+
+/* SUCHE */
+function searchEmployees() {
+    const value = document.getElementById("searchEmployee").value.toLowerCase();
+
+    const result = employees.filter(e =>
+        e.vorname.toLowerCase().includes(value) ||
+        e.nachname.toLowerCase().includes(value) ||
+        e.personalnr.includes(value)
+    );
+
+    renderEmployees(result);
+}
 
 </script>
 
