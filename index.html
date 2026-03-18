@@ -12,26 +12,75 @@
         background-color: #0d0d0d;
         color: #e0e0e0;
     }
+
     header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
         padding: 15px 30px;
         background: linear-gradient(90deg, #0f0f0f, #1a1a1a);
         border-bottom: 1px solid #222;
         box-shadow: 0 2px 10px rgba(0,255,255,0.1);
     }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     header .user-info {
         font-size: 14px;
         color: #00ffff;
     }
+
+    /* SUCHLEISTE */
+    .directory {
+        margin-top: 15px;
+        background: #121212;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,255,255,0.1);
+    }
+
+    .directory h2 {
+        margin: 0 0 10px 0;
+        color: #00ffff;
+        font-size: 16px;
+    }
+
+    .directory input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #00ffff;
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    .employee-list {
+        margin-top: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        font-size: 13px;
+    }
+
+    .employee {
+        padding: 8px;
+        border-bottom: 1px solid #222;
+    }
+
+    .employee span {
+        display: block;
+    }
+
     main {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: calc(100vh - 60px);
+        height: calc(100vh - 140px);
         flex-direction: column;
     }
+
     .login-container, .apps-container, .loading-container {
         background-color: #121212;
         padding: 40px 30px;
@@ -41,17 +90,11 @@
         text-align: center;
         margin-bottom: 20px;
     }
-    .login-container h1, .apps-container h1, .loading-container h1 {
+
+    h1 {
         color: #00ffff;
-        margin-bottom: 25px;
-        letter-spacing: 1px;
     }
-    .login-container label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-        color: #0ff;
-    }
+
     .login-container input {
         width: 100%;
         padding: 10px;
@@ -60,59 +103,27 @@
         border: 1px solid #00ffff;
         background-color: #1a1a1a;
         color: #e0e0e0;
-        font-size: 14px;
     }
-    .login-container input:focus {
-        outline: none;
-        border-color: #0ff;
-        box-shadow: 0 0 10px #00ffff;
-    }
-    .login-container button {
+
+    button {
         width: 100%;
         padding: 12px;
         font-weight: bold;
-        font-size: 16px;
-        color: #0d0d0d;
         background-color: #00ffff;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
     }
-    .login-container button:hover {
-        background-color: #00cccc;
-        box-shadow: 0 0 15px #00ffff;
-    }
-    .apps-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 10px;
-    }
+
     .apps-list button {
+        margin-bottom: 10px;
         background-color: #1a1a1a;
         color: #0ff;
         border: 2px solid #00ffff;
-        padding: 12px 20px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        width: 80%;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s;
-        text-transform: uppercase;
-        letter-spacing: 1px;
     }
-    .apps-list button:hover {
-        background-color: #00ffff;
-        color: #0d0d0d;
-        box-shadow: 0 0 15px #00ffff;
-    }
+
     .hidden { display: none; }
 
-    /* Lade-Animation */
     .loader {
         border: 5px solid #121212;
         border-top: 5px solid #00ffff;
@@ -122,27 +133,37 @@
         animation: spin 1s linear infinite;
         margin: 20px auto;
     }
+
     @keyframes spin {
         0% { transform: rotate(0deg);}
         100% { transform: rotate(360deg);}
     }
 </style>
 </head>
+
 <body>
+
 <header>
-    <div>Portal BYOD Studios</div>
-    <div class="user-info">Angemeldet: —</div>
+    <div class="top-bar">
+        <div>Portal BYOD Studios</div>
+        <div class="user-info">Angemeldet: —</div>
+    </div>
+
+    <!-- MITARBEITERVERZEICHNIS -->
+    <div class="directory">
+        <h2>Mitarbeiterverzeichnis</h2>
+        <input type="text" id="searchEmployee" placeholder="Suchen nach Name, Personalnummer, Telefon...">
+        <div class="employee-list" id="employeeList"></div>
+    </div>
 </header>
+
 <main>
+
     <div class="login-container" id="loginContainer">
         <h1>Login</h1>
         <form id="loginForm">
-            <label for="username">Benutzername</label>
-            <input type="text" id="username" name="username" placeholder="Ihr Benutzername" required>
-            
-            <label for="password">Passwort</label>
-            <input type="password" id="password" name="password" placeholder="Ihr Passwort" required>
-            
+            <input type="text" id="username" placeholder="Benutzername" required>
+            <input type="password" id="password" placeholder="Passwort" required>
             <button type="submit">Anmelden</button>
         </form>
     </div>
@@ -159,41 +180,44 @@
 
     <div class="apps-container hidden" id="appsContainer">
         <h1>Ihre Apps</h1>
-        <div class="apps-list" id="appsList">
-            <!-- Buttons für Apps -->
-        </div>
+        <div class="apps-list" id="appsList"></div>
     </div>
+
 </main>
 
 <script>
+
+/* USER */
 const users = [
-    { username: "61128323", password: "Indoorcycling2026!", vorname: "Louis", nachname: "Schwickert", apps: [ 
-	{name: "userhelpdesk", url: "https://byodstudios.onepage.me/userhelpdesk"},
-	{name: "Intranet", url: "https://byodit1.bitrix24.de"},
-	{name: "Prüfungsportal - Kandidatenzugang", url: "https://candidate.speedexam.net"}
-    ] },
-    { username: "07040934", password: "start123!", vorname: "Tiemo", nachname: "Kroth", apps: [] }
+    { username: "61128323", password: "Indoorcycling2026!", vorname: "Louis", nachname: "Schwickert", apps: [
+        {name: "Userhelpdesk", url: "https://byodstudios.onepage.me/userhelpdesk"}
+    ]}
 ];
 
+/* MITARBEITER (PLATZHALTER) */
+const employees = [
+    { personalnr: "1001", vorname: "Max", nachname: "Mustermann", tel: "0123456789", email: "max@firma.de" },
+    { personalnr: "1002", vorname: "Anna", nachname: "Schmidt", tel: "0987654321", email: "anna@firma.de" },
+    { personalnr: "1003", vorname: "Lucas", nachname: "Weber", tel: "0170123456", email: "lucas@firma.de" }
+];
+
+/* LOGIN */
 const loginForm = document.getElementById('loginForm');
 const loginContainer = document.getElementById('loginContainer');
 const loadingContainer = document.getElementById('loadingContainer');
 const appsContainer = document.getElementById('appsContainer');
 const appsList = document.getElementById('appsList');
 const userInfo = document.querySelector('.user-info');
-const appOpenContainer = document.getElementById('appOpenContainer');
-
-let currentUser = null;
 
 loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
 
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = users.find(u =>
+        u.username === username.value &&
+        u.password === password.value
+    );
 
     if(user) {
-        currentUser = user;
         userInfo.textContent = `Angemeldet: ${user.vorname} ${user.nachname}`;
         loginContainer.classList.add('hidden');
         loadingContainer.classList.remove('hidden');
@@ -201,39 +225,45 @@ loginForm.addEventListener('submit', function(e) {
         setTimeout(() => {
             loadingContainer.classList.add('hidden');
             appsContainer.classList.remove('hidden');
-            displayApps(user.apps);
-        }, 3000);
+        }, 2000);
     } else {
-        alert('Benutzername oder Passwort ist falsch.');
+        alert("Login falsch");
     }
-
-    loginForm.reset();
 });
 
-function displayApps(apps) {
-    appsList.innerHTML = "";
-    if(apps.length === 0) {
-        appsList.innerHTML = "Apps: Es sind momentan keine Apps vorhanden";
-        return;
-    }
-    apps.forEach(app => {
-        const btn = document.createElement('button');
-        btn.textContent = app.name;
-        btn.addEventListener('click', () => openApp(app.url));
-        appsList.appendChild(btn);
+/* MITARBEITER SUCHEN */
+const searchInput = document.getElementById("searchEmployee");
+const employeeList = document.getElementById("employeeList");
+
+function renderEmployees(list) {
+    employeeList.innerHTML = "";
+    list.forEach(emp => {
+        const div = document.createElement("div");
+        div.className = "employee";
+        div.innerHTML = `
+            <span><b>${emp.vorname} ${emp.nachname}</b> (${emp.personalnr})</span>
+            <span>Tel: ${emp.tel}</span>
+            <span>Email: ${emp.email}</span>
+        `;
+        employeeList.appendChild(div);
     });
 }
 
-function openApp(url) {
-    appsContainer.classList.add('hidden');
-    appOpenContainer.classList.remove('hidden');
+searchInput.addEventListener("input", () => {
+    const value = searchInput.value.toLowerCase();
+    const filtered = employees.filter(emp =>
+        emp.vorname.toLowerCase().includes(value) ||
+        emp.nachname.toLowerCase().includes(value) ||
+        emp.personalnr.includes(value) ||
+        emp.tel.includes(value)
+    );
+    renderEmployees(filtered);
+});
 
-    setTimeout(() => {
-        appOpenContainer.classList.add('hidden');
-        appsContainer.classList.remove('hidden');
-        window.open(url, '_blank');
-    }, 10000); // 10 Sekunden
-}
+/* INITIAL */
+renderEmployees(employees);
+
 </script>
+
 </body>
 </html>
