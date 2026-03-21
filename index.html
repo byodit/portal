@@ -292,9 +292,78 @@ main {
   gap: 20px;
 }
 
+.news-panel {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 680px) {
   .dashboard-grid { grid-template-columns: 1fr; }
+  .news-panel { grid-column: 1; }
   header { padding: 0 20px; }
+}
+
+/* ─── News ─── */
+.news-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.news-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.2s;
+  animation: fadeUp 0.4s ease both;
+}
+
+.news-item:hover {
+  border-color: var(--border-accent);
+  background: var(--card-hover);
+}
+
+.news-tag {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-size: 0.68rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tag-info    { background: rgba(0,229,255,0.12); color: var(--accent); }
+.tag-update  { background: rgba(123,97,255,0.15); color: #a78bfa; }
+.tag-event   { background: rgba(34,197,94,0.12); color: #4ade80; }
+.tag-wichtig { background: rgba(251,191,36,0.12); color: #fbbf24; }
+
+.news-body { flex: 1; }
+
+.news-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.news-text {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.news-date {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  align-self: flex-start;
+  white-space: nowrap;
 }
 
 .section-title {
@@ -550,6 +619,11 @@ main {
         </div>
       </div>
 
+      <div class="news-panel">
+        <div class="section-title">Neuigkeiten</div>
+        <div class="news-feed" id="newsFeed"></div>
+      </div>
+
     </div>
   </div>
 
@@ -577,6 +651,33 @@ const users = [
 const employees = [
   { personalnr: "61128323", vorname: "Louis", nachname: "Schwickert", tel: "+49 15901993688", email: "LSchwickert.BYOD@outlook.de" },
   { personalnr: "07040934", vorname: "Tiemo", nachname: "Kroth", tel: "—", email: "TKroth.BYOD@outlook.de" }
+];
+
+const news = [
+  {
+    tag: "wichtig", label: "Wichtig",
+    titel: "Neue IT-Sicherheitsrichtlinie ab April",
+    text: "Ab dem 1. April gilt für alle Mitarbeiter eine aktualisierte Passwortrichtlinie. Passwörter müssen mindestens 12 Zeichen haben und alle 90 Tage erneuert werden.",
+    datum: "21. März 2026"
+  },
+  {
+    tag: "update", label: "Update",
+    titel: "Bitrix24 Intranet – Wartung am Wochenende",
+    text: "Das Intranet ist am Samstag, 22. März zwischen 02:00 und 06:00 Uhr wegen Wartungsarbeiten nicht erreichbar. Bitte plant eure Arbeit entsprechend.",
+    datum: "20. März 2026"
+  },
+  {
+    tag: "event", label: "Event",
+    titel: "Team-Meeting Q2 – Termin steht fest",
+    text: "Das nächste All-Hands-Meeting findet am 3. April um 10:00 Uhr statt. Der Link zur Videokonferenz wird rechtzeitig per E-Mail verschickt.",
+    datum: "18. März 2026"
+  },
+  {
+    tag: "info", label: "Info",
+    titel: "Willkommen im neuen Portal",
+    text: "Das BYOD Studios Intranet-Portal wurde vollständig überarbeitet. Bei Fragen oder Feedback wendet euch an den UserHelpDesk.",
+    datum: "15. März 2026"
+  }
 ];
 
 let currentUser = null;
@@ -611,6 +712,7 @@ function showDashboard(user) {
   document.getElementById("logoutBtn").classList.add("visible");
 
   loadApps(user.apps);
+  loadNews();
   show("dashboardView", "block");
 }
 
@@ -643,6 +745,20 @@ function loadApps(apps) {
     btn.onclick = () => window.open(app.url, "_blank");
     list.appendChild(btn);
   });
+}
+
+function loadNews() {
+  const feed = document.getElementById("newsFeed");
+  feed.innerHTML = news.map((n, i) => `
+    <div class="news-item" style="animation-delay:${i * 0.08}s">
+      <span class="news-tag tag-${n.tag}">${n.label}</span>
+      <div class="news-body">
+        <div class="news-title">${n.titel}</div>
+        <div class="news-text">${n.text}</div>
+      </div>
+      <span class="news-date">${n.datum}</span>
+    </div>
+  `).join("");
 }
 
 function searchEmployees() {
