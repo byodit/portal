@@ -212,6 +212,11 @@ textarea{resize:vertical;min-height:80px}
   header{padding:0 18px}
   .tab-btn,.atab{font-size:.7rem;padding:8px 6px}
 }
+/* PW CHANGE */
+.pw-change-wrap{width:100%;max-width:400px;animation:fadeUp .5s ease both}
+.pw-req{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.8;padding:10px 14px;border-radius:8px;background:rgba(0,229,255,.05);border:1px solid var(--border)}
+.pw-req .ok{color:#4ade80}
+.pw-req .no{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -246,6 +251,30 @@ textarea{resize:vertical;min-height:80px}
     </div>
     <button class="btn-primary" onclick="login()">Anmelden →</button>
     <div class="error-msg" id="errorMsg">Benutzername oder Passwort ist falsch.</div>
+  </div>
+</div>
+
+<!-- Passwort ändern (erster Login) -->
+<div class="pw-change-wrap" id="pwChangeView" style="display:none">
+  <div class="login-header">
+    <h1>Passwort setzen</h1>
+    <p>Willkommen! Bitte wähle jetzt dein persönliches Passwort.</p>
+  </div>
+  <div class="card">
+    <div class="field"><label>Neues Passwort</label>
+      <input id="newPw1" type="password" placeholder="Neues Passwort …" oninput="checkPwReqs()">
+    </div>
+    <div class="field"><label>Passwort wiederholen</label>
+      <input id="newPw2" type="password" placeholder="Wiederholen …" oninput="checkPwReqs()" onkeydown="if(event.key==='Enter')submitNewPw()">
+    </div>
+    <div class="pw-req" id="pwReqs">
+      <div id="req-len">  <span class="no">✗</span> Mindestens 8 Zeichen</div>
+      <div id="req-upper"><span class="no">✗</span> Mindestens ein Großbuchstabe</div>
+      <div id="req-num">  <span class="no">✗</span> Mindestens eine Zahl</div>
+      <div id="req-match"><span class="no">✗</span> Passwörter stimmen überein</div>
+    </div>
+    <button class="btn-primary" onclick="submitNewPw()" style="margin-top:16px">Passwort speichern →</button>
+    <div class="error-msg" id="pwChangeError">Bitte alle Anforderungen erfüllen.</div>
   </div>
 </div>
 
@@ -485,10 +514,64 @@ async function login() {
 
   err.style.display = "none";
   currentUser = data;
+  setLoading(false);
+
+  // Erster Login → Passwort ändern erzwingen
+  if (data.muss_pw_aendern) {
+    show("pwChangeView", "flex");
+    setTimeout(() => document.getElementById("newPw1").focus(), 100);
+    return;
+  }
 
   setLoading(true, "Daten werden geladen …");
   await loadAllData();
   setLoading(false);
+  renderDashboard();
+}
+
+function checkPwReqs() {
+  const pw1 = document.getElementById("newPw1").value;
+  const pw2 = document.getElementById("newPw2").value;
+  const setReq = (id, ok) => {
+    const el = document.getElementById(id);
+    el.innerHTML = `<span class="${ok?'ok':'no'}">${ok?'✓':'✗'}</span> ` + el.textContent.replace(/^[✓✗] /, "");
+  };
+  setReq("req-len",   pw1.length >= 8);
+  setReq("req-upper", /[A-Z]/.test(pw1));
+  setReq("req-num",   /[0-9]/.test(pw1));
+  setReq("req-match", pw1.length > 0 && pw1 === pw2);
+}
+
+async function submitNewPw() {
+  const pw1 = document.getElementById("newPw1").value;
+  const pw2 = document.getElementById("newPw2").value;
+  const err  = document.getElementById("pwChangeError");
+
+  const valid = pw1.length >= 8 && /[A-Z]/.test(pw1) && /[0-9]/.test(pw1) && pw1 === pw2;
+  if (!valid) { err.style.display = "block"; return; }
+  err.style.display = "none";
+
+  setLoading(true, "Passwort wird gespeichert …");
+  hide("pwChangeView");
+
+  const { error } = await sb.from("users")
+    .update({ password: pw1, muss_pw_aendern: false })
+    .eq("id", currentUser.id);
+
+  if (error) {
+    setLoading(false);
+    show("pwChangeView", "flex");
+    toast("❌ Fehler beim Speichern: " + error.message, true);
+    return;
+  }
+
+  currentUser.password = pw1;
+  currentUser.muss_pw_aendern = false;
+
+  setLoading(true, "Daten werden geladen …");
+  await loadAllData();
+  setLoading(false);
+  toast("✅ Passwort erfolgreich gesetzt!");
   renderDashboard();
 }
 
@@ -507,9 +590,9 @@ async function loadAllData() {
 
 function logout() {
   currentUser = null; allUsers = []; appLib = []; newsItems = []; tasks = [];
-  hide("dashboardView"); hide("adminPage");
+  hide("dashboardView"); hide("adminPage"); hide("pwChangeView");
   ["userBadge","adminBadge","adminPageBtn","logoutBtn"].forEach(id => document.getElementById(id).classList.remove("visible"));
-  ["username","password","searchInput"].forEach(id => document.getElementById(id).value = "");
+  ["username","password","searchInput","newPw1","newPw2"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("employeeList").innerHTML = '<div class="hint">Suche starten, um Mitarbeiter zu finden</div>';
   switchTab("overview");
   show("loginView", "flex");
@@ -782,7 +865,7 @@ async function saveEmployee() {
   } else {
     if (!pw) { toast("⚠️ Bitte ein Passwort setzen", true); setBtnLoading("empSaveBtn", false); return; }
     if (allUsers.find(u => u.username===username)) { toast("⚠️ Personalnummer bereits vergeben", true); setBtnLoading("empSaveBtn", false); return; }
-    const { data, error } = await sb.from("users").insert({ vorname, nachname, username, password:pw, email, tel, admin, apps:[] }).select().single();
+    const { data, error } = await sb.from("users").insert({ vorname, nachname, username, password:pw, email, tel, admin, apps:[], muss_pw_aendern:true }).select().single();
     if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("empSaveBtn", false); return; }
     allUsers.push(data); toast("✅ Mitarbeiter angelegt"); clearEmpForm();
   }
