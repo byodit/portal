@@ -880,13 +880,33 @@ async function saveEmployee() {
     toast("✅ Mitarbeiter aktualisiert"); cancelEmpEdit();
   } else {
     if (!pw) { toast("⚠️ Bitte ein Passwort setzen", true); setBtnLoading("empSaveBtn", false); return; }
+    if (!email) { toast("⚠️ Bitte eine E-Mail-Adresse angeben", true); setBtnLoading("empSaveBtn", false); return; }
     if (allUsers.find(u => u.username===username)) { toast("⚠️ Personalnummer bereits vergeben", true); setBtnLoading("empSaveBtn", false); return; }
+
     const { data, error } = await sb.from("users").insert({ vorname, nachname, username, password:pw, email, tel, admin, apps:[], muss_pw_aendern:true }).select().single();
     if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("empSaveBtn", false); return; }
-    allUsers.push(data); toast("✅ Mitarbeiter angelegt"); clearEmpForm();
+    allUsers.push(data);
+
+    // Willkommens-E-Mail senden
+    try {
+      await sendWelcomeEmail({ vorname, nachname, email, username, password: pw });
+      toast("✅ Mitarbeiter angelegt & Willkommens-E-Mail gesendet");
+    } catch(e) {
+      toast("✅ Mitarbeiter angelegt (E-Mail konnte nicht gesendet werden)", true);
+    }
+
+    clearEmpForm();
   }
   setBtnLoading("empSaveBtn", false);
   renderEmpAdminList(); renderAssignSelect();
+}
+
+async function sendWelcomeEmail({ vorname, nachname, email, username, password }) {
+  const portalUrl = window.location.href;
+  const { error } = await sb.functions.invoke("send-welcome-email", {
+    body: { vorname, nachname, email, username, password, portalUrl }
+  });
+  if (error) throw error;
 }
 
 function startEditEmp(id) {
