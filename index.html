@@ -35,7 +35,7 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .hbtn.visible{display:flex}
 
 /* MAIN */
-main{position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-start;min-height:calc(100vh - 64px);padding:40px 20px}
+main{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 64px);padding:40px 20px}
 
 /* LOGIN */
 .login-wrap{width:100%;max-width:400px;animation:fadeUp .5s ease both}
@@ -52,16 +52,18 @@ select option{background:#0d1219}
 textarea{resize:vertical;min-height:80px}
 .btn-primary{width:100%;margin-top:8px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;letter-spacing:.04em;transition:all .25s}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,229,255,.35)}
-.error-msg{margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff8080;font-size:.85rem;display:none}
+.error-msg{margin-top:12px;padding:12px 16px;border-radius:10px;background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff8080;font-size:.85rem;display:none;text-align:center;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.02em}
 
 /* LOADING */
-.loading-wrap{text-align:center;display:none;flex-direction:column;align-items:center;gap:16px;animation:fadeUp .3s ease both}
-.loading-wrap h2{font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--muted);font-weight:400}
-.loader-ring{width:52px;height:52px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .85s linear infinite}
+.loading-wrap{text-align:center;display:none;flex-direction:column;align-items:center;gap:20px;animation:fadeUp .4s ease both}
+.loading-wrap .load-card{background:var(--card);border:1px solid var(--border-accent);border-radius:20px;padding:40px 48px;box-shadow:0 24px 64px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:20px}
+.loading-wrap h2{font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--text);font-weight:700;margin:0}
+.loading-wrap p{font-size:.82rem;color:var(--muted);margin:0}
+.loader-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .85s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* DASHBOARD */
-.dashboard{display:none;width:100%;max-width:960px;animation:fadeUp .5s ease both}
+.dashboard{display:none;width:100%;max-width:960px;animation:fadeUp .5s ease both;align-self:flex-start}
 .tab-bar{display:flex;gap:4px;margin-bottom:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px}
 .tab-btn{flex:1;padding:10px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;width:auto}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04);box-shadow:none;transform:none}
@@ -143,7 +145,7 @@ textarea{resize:vertical;min-height:80px}
 .emp-group:last-child{margin-bottom:0}
 
 /* ADMIN PAGE */
-.admin-page{display:none;width:100%;max-width:1000px;animation:fadeUp .4s ease both}
+.admin-page{display:none;width:100%;max-width:1000px;animation:fadeUp .4s ease both;align-self:flex-start}
 .admin-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
 .admin-page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem}
 .back-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;transition:all .2s;width:auto}
@@ -237,7 +239,7 @@ textarea{resize:vertical;min-height:80px}
 <main>
 
 <!-- Login -->
-<div class="login-wrap" id="loginView">
+<div class="login-wrap" id="loginView" style="display:none">
   <div class="login-header">
     <h1>Willkommen zurück</h1>
     <p>Melde dich mit deiner Personalnummer an</p>
@@ -280,8 +282,13 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- Loading -->
 <div class="loading-wrap" id="loadingView">
-  <div class="loader-ring"></div>
-  <h2 id="loadingMsg">Wird geladen …</h2>
+  <div class="load-card">
+    <div class="loader-ring"></div>
+    <div>
+      <h2 id="loadingMsg">Portal wird geöffnet …</h2>
+      <p id="loadingSubMsg">Einen Moment bitte</p>
+    </div>
+  </div>
 </div>
 
 <!-- Dashboard -->
@@ -480,6 +487,15 @@ textarea{resize:vertical;min-height:80px}
 <script>
 /* ═══ SUPABASE ═══ */
 const SUPA_URL = "https://qanouffkmbuugivkjyrv.supabase.co";
+
+// Portal-Startbildschirm
+window.addEventListener("DOMContentLoaded", () => {
+  setLoading(true, "Portal wird geöffnet …", "BYOD Studios Intranet");
+  setTimeout(() => {
+    setLoading(false);
+    show("loginView", "flex");
+  }, 1800);
+});
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhbm91ZmZrbWJ1dWdpdmtqeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTMyNzgsImV4cCI6MjA4OTc2OTI3OH0.Ym6LPajZS1vTRiXE6nh4oF7WolFRpdqEeGxpoIOZFTg";
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
@@ -498,7 +514,7 @@ async function login() {
   const password = document.getElementById("password").value;
   const err      = document.getElementById("errorMsg");
 
-  setLoading(true, "Anmelden …");
+  setLoading(true, "Anmelden …", "Zugangsdaten werden geprüft");
   hide("loginView");
 
   const { data, error } = await sb.from("users")
@@ -523,7 +539,7 @@ async function login() {
     return;
   }
 
-  setLoading(true, "Daten werden geladen …");
+  setLoading(true, "Daten werden geladen …", "Fast fertig");
   await loadAllData();
   setLoading(false);
   renderDashboard();
@@ -551,7 +567,7 @@ async function submitNewPw() {
   if (!valid) { err.style.display = "block"; return; }
   err.style.display = "none";
 
-  setLoading(true, "Passwort wird gespeichert …");
+  setLoading(true, "Passwort wird gespeichert …", "Einen Moment bitte");
   hide("pwChangeView");
 
   const { error } = await sb.from("users")
@@ -568,7 +584,7 @@ async function submitNewPw() {
   currentUser.password = pw1;
   currentUser.muss_pw_aendern = false;
 
-  setLoading(true, "Daten werden geladen …");
+  setLoading(true, "Daten werden geladen …", "Fast fertig");
   await loadAllData();
   setLoading(false);
   toast("✅ Passwort erfolgreich gesetzt!");
@@ -1082,8 +1098,9 @@ async function deleteNews(id) {
 }
 
 /* ═══ UTILS ═══ */
-function setLoading(on, msg="Wird geladen …") {
+function setLoading(on, msg="Portal wird geöffnet …", sub="Einen Moment bitte") {
   document.getElementById("loadingMsg").textContent = msg;
+  document.getElementById("loadingSubMsg").textContent = sub;
   if (on) { show("loadingView","flex"); } else { hide("loadingView"); }
 }
 function setBtnLoading(id, on) {
