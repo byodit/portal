@@ -967,8 +967,11 @@ async function saveEmployee() {
 
 async function sendWelcomeEmail({ vorname, nachname, email, username, password }) {
   const portalUrl = window.location.href;
+  const payload = JSON.stringify({ vorname, nachname, email, username, password, portalUrl });
+
   const { error } = await sb.functions.invoke("send-welcome-email", {
-    body: { vorname, nachname, email, username, password, portalUrl }
+    body: payload,
+    headers: { "Content-Type": "application/json" }
   });
   if (error) throw error;
 }
