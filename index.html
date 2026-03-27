@@ -432,6 +432,7 @@ textarea{resize:vertical;min-height:80px}
         <div class="form-field"><label class="flabel">Passwort</label><input id="ef-pw" type="password" placeholder="••••••••••"></div>
         <div class="form-field"><label class="flabel">E-Mail</label><input id="ef-email" placeholder="m.mustermann@byod.de"></div>
         <div class="form-field"><label class="flabel">Telefon</label><input id="ef-tel" placeholder="+49 …"></div>
+        <div class="form-field span2"><label class="flabel">Tätigkeitsbereich</label><input id="ef-org" placeholder="z. B. IT, Marketing, Vertrieb …"></div>
         <div class="form-field">
           <label class="flabel">Admin-Rechte</label>
           <select id="ef-admin"><option value="false">Nein – normaler Mitarbeiter</option><option value="true">Ja – Admin-Zugang</option></select>
@@ -756,7 +757,8 @@ function searchEmployees() {
   if (!val) { el.innerHTML = '<div class="hint">Suche starten, um Mitarbeiter zu finden</div>'; return; }
   const res = allUsers.filter(e =>
     e.vorname.toLowerCase().includes(val) || e.nachname.toLowerCase().includes(val) ||
-    e.username.includes(val) || (e.tel||"").includes(val) || (e.email||"").toLowerCase().includes(val)
+    e.username.includes(val) || (e.tel||"").includes(val) || (e.email||"").toLowerCase().includes(val) ||
+    (e.org||"").toLowerCase().includes(val)
   );
   if (!res.length) { el.innerHTML = '<div class="hint">Keine Treffer gefunden</div>'; return; }
   el.innerHTML = res.map(e => `
@@ -765,7 +767,7 @@ function searchEmployees() {
         <span class="emp-nr">${e.username}</span>
         ${e.admin ? '<span class="emp-nr" style="background:rgba(123,97,255,.15);color:#a78bfa;margin-left:4px">Admin</span>' : ''}
       </div>
-      <div class="emp-details">📞 ${e.tel||"—"}<br>✉️ <a href="mailto:${e.email}">${e.email||"—"}</a></div>
+      <div class="emp-details">📞 ${e.tel||"—"}<br>✉️ <a href="mailto:${e.email}">${e.email||"—"}</a>${e.org ? `<br>🏢 ${e.org}` : ""}</div>
     </div>`).join("");
 }
 
@@ -912,7 +914,7 @@ function renderEmpAdminList() {
           <span class="emp-nr">${u.username}</span>
           ${u.admin ? '<span class="emp-nr" style="background:rgba(123,97,255,.15);color:#a78bfa;margin-left:4px">Admin</span>' : ''}
         </div>
-        <div class="admin-row-sub">${u.email||"—"} · ${u.tel||"—"}</div>
+        <div class="admin-row-sub">${u.email||"—"} · ${u.tel||"—"}${u.org ? " · "+u.org : ""}</div>
       </div>
       <div class="admin-row-actions">
         <button class="btn-outline" onclick="startEditEmp('${u.id}')">✏️ Bearbeiten</button>
@@ -929,13 +931,14 @@ async function saveEmployee() {
   const pw       = document.getElementById("ef-pw").value;
   const email    = document.getElementById("ef-email").value.trim();
   const tel      = document.getElementById("ef-tel").value.trim();
+  const org      = document.getElementById("ef-org").value.trim();
   const admin    = document.getElementById("ef-admin").value === "true";
 
   if (!vorname || !nachname || !username) { toast("⚠️ Bitte Name und Personalnummer ausfüllen", true); return; }
 
   setBtnLoading("empSaveBtn", true);
   if (editId) {
-    const payload = { vorname, nachname, username, email, tel, admin };
+    const payload = { vorname, nachname, username, email, tel, org, admin };
     if (pw) payload.password = pw;
     const { error } = await sb.from("users").update(payload).eq("id", editId);
     if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("empSaveBtn", false); return; }
@@ -947,7 +950,7 @@ async function saveEmployee() {
     if (!email) { toast("⚠️ Bitte eine E-Mail-Adresse angeben", true); setBtnLoading("empSaveBtn", false); return; }
     if (allUsers.find(u => u.username===username)) { toast("⚠️ Personalnummer bereits vergeben", true); setBtnLoading("empSaveBtn", false); return; }
 
-    const { data, error } = await sb.from("users").insert({ vorname, nachname, username, password:pw, email, tel, admin, apps:[], muss_pw_aendern:true }).select().single();
+    const { data, error } = await sb.from("users").insert({ vorname, nachname, username, password:pw, email, tel, org, admin, apps:[], muss_pw_aendern:true }).select().single();
     if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("empSaveBtn", false); return; }
     allUsers.push(data);
 
@@ -985,6 +988,7 @@ function startEditEmp(id) {
   document.getElementById("ef-pw").value       = "";
   document.getElementById("ef-email").value    = u.email||"";
   document.getElementById("ef-tel").value      = u.tel||"";
+  document.getElementById("ef-org").value      = u.org||"";
   document.getElementById("ef-admin").value    = u.admin ? "true" : "false";
   document.getElementById("empFormTitle").textContent      = "Mitarbeiter bearbeiten";
   document.getElementById("empSaveBtnLabel").textContent   = "Änderungen speichern";
@@ -999,7 +1003,7 @@ function cancelEmpEdit() {
   document.getElementById("empCancelEditBtn").style.display = "none";
 }
 function clearEmpForm() {
-  ["ef-vorname","ef-nachname","ef-pnr","ef-pw","ef-email","ef-tel"].forEach(id => document.getElementById(id).value="");
+  ["ef-vorname","ef-nachname","ef-pnr","ef-pw","ef-email","ef-tel","ef-org"].forEach(id => document.getElementById(id).value="");
   document.getElementById("ef-admin").value = "false";
   document.getElementById("editEmpId").value = "";
 }
