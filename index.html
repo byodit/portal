@@ -263,49 +263,7 @@ textarea{resize:vertical;min-height:80px}
 .chat-send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,229,255,.3)}
 .chat-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0}
 
-/* ═══ KALENDER (helles Design) ═══ */
-.cal-shell{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:flex-start}
-.cal-left{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.cal-month-label{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#1a1a2e}
-.cal-nav-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid #e8e8e8;background:#fff;color:#555;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;padding:0;line-height:1}
-.cal-nav-btn:hover{background:#f0f0f0;border-color:#ccc;box-shadow:none;transform:none}
-.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:8px}
-.cal-weekdays div{text-align:center;font-size:.72rem;font-weight:700;color:#999;letter-spacing:.06em;text-transform:uppercase;padding:4px 0}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-day{min-height:44px;border-radius:10px;display:flex;flex-direction:column;align-items:center;padding:6px 4px;cursor:pointer;transition:all .18s;position:relative;background:transparent;border:1.5px solid transparent}
-.cal-day:hover{background:#f5f5ff;border-color:#e0e0ff}
-.cal-day.other-month .cal-day-num{color:#ccc}
-.cal-day.today{background:linear-gradient(135deg,#00e5ff22,#7b61ff18);border-color:#7b61ff44}
-.cal-day.today .cal-day-num{color:#5b41df;font-weight:800}
-.cal-day.selected{background:linear-gradient(135deg,#5b41df,#7b61ff);border-color:#5b41df}
-.cal-day.selected .cal-day-num{color:#fff;font-weight:800}
-.cal-day.has-events .cal-dot{display:block}
-.cal-day-num{font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;color:#1a1a2e;line-height:1}
-.cal-dot{display:none;width:5px;height:5px;border-radius:50%;background:#7b61ff;margin-top:4px}
-.cal-day.selected .cal-dot{background:#fff}
-
-.cal-right{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.06);min-height:400px;display:flex;flex-direction:column}
-.cal-right-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.cal-day-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#1a1a2e}
-.cal-event-list{display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;max-height:440px;scrollbar-width:thin}
-.cal-empty{text-align:center;color:#bbb;font-size:.85rem;padding:40px 0}
-.cal-event-card{background:#f8f9fa;border:1.5px solid #eee;border-radius:12px;padding:13px 14px;transition:all .2s;animation:fadeUp .3s ease both}
-.cal-event-card:hover{border-color:#c4b5fd;background:#faf5ff}
-.cal-event-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:#1a1a2e;margin-bottom:4px}
-.cal-event-time{font-size:.78rem;color:#7b61ff;font-weight:600;margin-bottom:5px}
-.cal-event-desc{font-size:.8rem;color:#666;margin-bottom:6px;line-height:1.4}
-.cal-event-people{display:flex;flex-wrap:wrap;gap:5px}
-.cal-person-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;background:#ede9fe;color:#5b41df;font-size:.72rem;font-family:'Syne',sans-serif;font-weight:600}
-.cal-event-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:8px}
-
-/* Assignee checkboxes in event modal */
-.ev-check-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;border:1.5px solid #eee;background:#f8f9fa;cursor:pointer;transition:all .2s}
-.ev-check-row:hover{border-color:#c4b5fd;background:#faf5ff}
-.ev-check-row input[type=checkbox]{width:16px;height:16px;accent-color:#7b61ff;cursor:pointer}
-.ev-check-label{font-size:.88rem;color:#1a1a2e;flex:1}
-
-@media(max-width:900px){.cal-shell{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:900px){.sidebar{display:none}}
 @media(max-width:700px){
   .two-col,.form-grid{grid-template-columns:1fr}
   .form-field.span2{grid-column:1}
@@ -401,7 +359,7 @@ textarea{resize:vertical;min-height:80px}
           📞 <a href="tel:+4915901993688">+49 159 01993688</a>
         </div>
         <div class="sidebar-contact-row">
-          ✉️ <a href="/cdn-cgi/l/email-protection#f6baa5959e819f959d938482d8b4afb9b2b69983829a99999dd89293">HelpDesk schreiben</a>
+          ✉️ <a href="mailto:LSchwickert.BYOD@outlook.de">HelpDesk schreiben</a>
         </div>
       </div>
       <div class="sidebar-divider"></div>
@@ -429,10 +387,9 @@ textarea{resize:vertical;min-height:80px}
 
     <div class="sidebar-card">
       <div class="sidebar-section-title">Schnellzugriff</div>
-      <div onclick="switchTab('tasks')"    class="sidebar-quick-link">📋 Meine Aufgaben</div>
-      <div onclick="switchTab('news')"     class="sidebar-quick-link">📰 Neuigkeiten</div>
-      <div onclick="switchTab('calendar')" class="sidebar-quick-link">📅 Kalender</div>
-      <div onclick="switchTab('chat')"     class="sidebar-quick-link">💬 Chat</div>
+      <div onclick="switchTab('tasks')" class="sidebar-quick-link">📋 Meine Aufgaben</div>
+      <div onclick="switchTab('news')"  class="sidebar-quick-link">📰 Neuigkeiten</div>
+      <div onclick="switchTab('chat')"  class="sidebar-quick-link">💬 Chat</div>
     </div>
   </aside>
 
@@ -443,7 +400,6 @@ textarea{resize:vertical;min-height:80px}
     <button class="tab-btn"        onclick="switchTab('tasks')">Aufgaben</button>
     <button class="tab-btn"        onclick="switchTab('news')">Neuigkeiten</button>
     <button class="tab-btn"        onclick="switchTab('directory')">Verzeichnis</button>
-    <button class="tab-btn"        onclick="switchTab('calendar')">📅 Kalender</button>
     <button class="tab-btn"        onclick="switchTab('chat')" id="chatTabBtn">💬 Chat</button>
   </div>
 
@@ -492,37 +448,6 @@ textarea{resize:vertical;min-height:80px}
         <button class="sbtn" onclick="searchEmployees()">Suchen</button>
       </div>
       <div class="emp-list-box" id="employeeList"><div class="hint">Suche starten, um Mitarbeiter zu finden</div></div>
-    </div>
-  </div>
-
-  <!-- Kalender -->
-  <div class="tab-panel" id="tab-calendar">
-    <div class="cal-shell">
-      <!-- Kalender links -->
-      <div class="cal-left">
-        <div class="cal-header">
-          <button class="cal-nav-btn" onclick="calPrev()">‹</button>
-          <div class="cal-month-label" id="calMonthLabel"></div>
-          <button class="cal-nav-btn" onclick="calNext()">›</button>
-        </div>
-        <div class="cal-weekdays">
-          <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
-        </div>
-        <div class="cal-grid" id="calGrid"></div>
-      </div>
-      <!-- Events rechts -->
-      <div class="cal-right">
-        <div class="cal-right-header">
-          <div class="cal-day-title" id="calDayTitle">Wähle einen Tag</div>
-          <button class="btn-add" id="calAddBtn" onclick="openEventModal()" style="display:none">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Termin
-          </button>
-        </div>
-        <div class="cal-event-list" id="calEventList">
-          <div class="cal-empty">← Wähle einen Tag aus</div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -663,43 +588,6 @@ textarea{resize:vertical;min-height:80px}
 
 </main>
 
-<!-- Event Modal -->
-<div class="modal-overlay" id="eventModal">
-  <div class="modal" style="max-width:500px;background:#fff;border:none;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.18)">
-    <div class="modal-header" style="border-bottom:1px solid #f0f0f0;padding-bottom:16px;margin-bottom:20px">
-      <div class="modal-title" style="color:#1a1a2e;font-size:1.15rem" id="eventModalTitle">Neuer Termin</div>
-      <button class="modal-close" onclick="closeEventModal()" style="background:#f5f5f5;border:none;color:#555">✕</button>
-    </div>
-    <input type="hidden" id="editEventId">
-    <div class="modal-field">
-      <label style="color:#555;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Titel</label>
-      <input type="text" id="evTitel" placeholder="Terminbeschreibung …" style="background:#f8f9fa;border:1.5px solid #e8e8e8;color:#1a1a2e;border-radius:10px;margin-top:6px">
-    </div>
-    <div class="modal-field">
-      <label style="color:#555;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Beschreibung (optional)</label>
-      <textarea id="evDesc" placeholder="Details …" style="background:#f8f9fa;border:1.5px solid #e8e8e8;color:#1a1a2e;border-radius:10px;margin-top:6px;min-height:70px"></textarea>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="modal-field">
-        <label style="color:#555;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Datum</label>
-        <input type="date" id="evDatum" style="background:#f8f9fa;border:1.5px solid #e8e8e8;color:#1a1a2e;border-radius:10px;margin-top:6px">
-      </div>
-      <div class="modal-field">
-        <label style="color:#555;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Uhrzeit (optional)</label>
-        <input type="time" id="evTime" style="background:#f8f9fa;border:1.5px solid #e8e8e8;color:#1a1a2e;border-radius:10px;margin-top:6px">
-      </div>
-    </div>
-    <div class="modal-field">
-      <label style="color:#555;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:8px">Beteiligte Mitarbeiter</label>
-      <div id="evAssignees" style="display:flex;flex-direction:column;gap:8px;max-height:160px;overflow-y:auto"></div>
-    </div>
-    <div class="modal-footer" style="margin-top:20px;border-top:1px solid #f0f0f0;padding-top:16px">
-      <button class="btn-cancel" onclick="closeEventModal()" style="background:#f5f5f5;border:none;color:#555;border-radius:10px">Abbrechen</button>
-      <button class="btn-save" id="evSaveBtn" onclick="saveEvent()" style="border-radius:10px">Speichern</button>
-    </div>
-  </div>
-</div>
-
 <!-- Task Modal -->
 <div class="modal-overlay" id="taskModal">
   <div class="modal">
@@ -731,26 +619,17 @@ textarea{resize:vertical;min-height:80px}
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ═══ SUPABASE ═══ */
 const SUPA_URL = "https://qanouffkmbuugivkjyrv.supabase.co";
 
-// Portal-Startbildschirm + Event Modal Listener
+// Portal-Startbildschirm
 window.addEventListener("DOMContentLoaded", () => {
-  const loadMsg = document.getElementById("loadingMsg");
-  const loadSub = document.getElementById("loadingSubMsg");
-  if (loadMsg) loadMsg.textContent = "Portal wird geöffnet …";
-  if (loadSub) loadSub.textContent = "BYOD Studios Intranet";
-  document.getElementById("loadingView").style.display = "flex";
+  setLoading(true, "Portal wird geöffnet …", "BYOD Studios Intranet");
   setTimeout(() => {
-    document.getElementById("loadingView").style.display = "none";
-    document.getElementById("loginView").style.display = "flex";
+    setLoading(false);
+    show("loginView", "flex");
   }, 1800);
-  const em = document.getElementById("eventModal");
-  if (em) em.addEventListener("click", e => { if (e.target===em) closeEventModal(); });
-  const tm = document.getElementById("taskModal");
-  if (tm) tm.addEventListener("click", e => { if (e.target===tm) closeTaskModal(); });
-  document.addEventListener("keydown", e => { if(e.key==="Escape"){ closeTaskModal(); closeEventModal(); } });
 });
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhbm91ZmZrbWJ1dWdpdmtqeXJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTMyNzgsImV4cCI6MjA4OTc2OTI3OH0.Ym6LPajZS1vTRiXE6nh4oF7WolFRpdqEeGxpoIOZFTg";
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -914,12 +793,11 @@ async function showAdminPage() {
 
 /* ═══ TABS ═══ */
 function switchTab(name) {
-  const names = ["overview","tasks","news","directory","calendar","chat"];
+  const names = ["overview","tasks","news","directory","chat"];
   document.querySelectorAll(".tab-btn").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.getElementById("tab-"+name).classList.add("active");
-  if (name === "chat")     initChatTab();
-  if (name === "calendar") initCalendar();
+  if (name === "chat") initChatTab();
 }
 function switchAdminTab(name) {
   const names = ["employees","apps","news"];
@@ -1103,6 +981,9 @@ async function saveTask() {
   setBtnLoading("taskSaveBtn", false);
   closeTaskModal(); renderTasks(); renderOverviewTasks();
 }
+
+document.getElementById("taskModal").addEventListener("click", e => { if(e.target===document.getElementById("taskModal"))closeTaskModal(); });
+document.addEventListener("keydown", e => { if(e.key==="Escape")closeTaskModal(); });
 
 /* ═══ ADMIN: MITARBEITER ═══ */
 function renderEmpAdminList() {
@@ -1544,188 +1425,6 @@ function escHtml(t) {
   return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-/* ═══ KALENDER ═══ */
-let calYear  = new Date().getFullYear();
-let calMonth = new Date().getMonth();
-let calSelectedDate = null;
-let calEvents = [];
-
-const MONTHS_DE = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-
-async function initCalendar() {
-  await loadCalEvents();
-  renderCalendar();
-  // Heute vorauswählen
-  const today = new Date();
-  if (!calSelectedDate) {
-    calSelectedDate = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-  }
-  renderCalendar();
-  renderCalDay(calSelectedDate);
-}
-
-async function loadCalEvents() {
-  const { data } = await sb.from("events").select("*").order("datum", { ascending: true });
-  calEvents = data || [];
-}
-
-function renderCalendar() {
-  document.getElementById("calMonthLabel").textContent = MONTHS_DE[calMonth] + " " + calYear;
-  const grid = document.getElementById("calGrid");
-  grid.innerHTML = "";
-
-  const firstDay = new Date(calYear, calMonth, 1);
-  const lastDay  = new Date(calYear, calMonth+1, 0);
-  // Monday-first: 0=Mon...6=Sun
-  let startDow = (firstDay.getDay() + 6) % 7;
-
-  // Previous month fill
-  for (let i = 0; i < startDow; i++) {
-    const d = new Date(calYear, calMonth, 1 - (startDow - i));
-    grid.appendChild(calDayEl(d, true));
-  }
-  // Current month
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    grid.appendChild(calDayEl(new Date(calYear, calMonth, d), false));
-  }
-  // Fill to complete last row
-  const total = startDow + lastDay.getDate();
-  const rem   = total % 7 === 0 ? 0 : 7 - (total % 7);
-  for (let i = 1; i <= rem; i++) {
-    grid.appendChild(calDayEl(new Date(calYear, calMonth+1, i), true));
-  }
-}
-
-function calDayEl(date, otherMonth) {
-  const iso   = dateToISO(date);
-  const today = dateToISO(new Date());
-  const hasEv = calEvents.some(e => e.datum === iso);
-  const div   = document.createElement("div");
-  div.className = "cal-day" +
-    (otherMonth   ? " other-month" : "") +
-    (iso === today ? " today"       : "") +
-    (iso === calSelectedDate ? " selected" : "") +
-    (hasEv        ? " has-events"  : "");
-  div.innerHTML = `<span class="cal-day-num">${date.getDate()}</span><span class="cal-dot"></span>`;
-  div.onclick = () => {
-    calSelectedDate = iso;
-    renderCalendar();
-    renderCalDay(iso);
-  };
-  return div;
-}
-
-function renderCalDay(iso) {
-  const el   = document.getElementById("calEventList");
-  const btn  = document.getElementById("calAddBtn");
-  const title = document.getElementById("calDayTitle");
-  const [y,m,d] = iso.split("-");
-  title.textContent = `${parseInt(d)}. ${MONTHS_DE[parseInt(m)-1]} ${y}`;
-  btn.style.display = "flex";
-
-  const dayEvents = calEvents.filter(e => e.datum === iso);
-  if (!dayEvents.length) {
-    el.innerHTML = '<div class="cal-empty">Keine Termine an diesem Tag</div>';
-    return;
-  }
-  el.innerHTML = dayEvents.map(ev => {
-    const people = (ev.assignees||[]).map(uid => {
-      const u = allUsers.find(x => x.id===uid);
-      return u ? `<span class="cal-person-chip">👤 ${u.vorname} ${u.nachname}</span>` : "";
-    }).join("");
-    const adminBtns = currentUser.admin
-      ? `<button class="btn-outline" style="padding:5px 10px;font-size:.75rem;border-radius:7px" onclick="editEvent('${ev.id}')">✏️</button>
-         <button class="btn-outline-red" style="padding:5px 10px;font-size:.75rem;border-radius:7px" onclick="deleteEvent('${ev.id}')">🗑</button>`
-      : "";
-    return `<div class="cal-event-card">
-      <div class="cal-event-title">${escHtml(ev.titel)}</div>
-      ${ev.uhrzeit ? `<div class="cal-event-time">🕐 ${ev.uhrzeit} Uhr</div>` : ""}
-      ${ev.beschreibung ? `<div class="cal-event-desc">${escHtml(ev.beschreibung)}</div>` : ""}
-      <div class="cal-event-people">${people}</div>
-      ${adminBtns ? `<div class="cal-event-actions">${adminBtns}</div>` : ""}
-    </div>`;
-  }).join("");
-}
-
-function calPrev() {
-  calMonth--; if (calMonth < 0) { calMonth=11; calYear--; }
-  renderCalendar();
-}
-function calNext() {
-  calMonth++; if (calMonth > 11) { calMonth=0; calYear++; }
-  renderCalendar();
-}
-
-/* Event Modal */
-function openEventModal(ev=null) {
-  document.getElementById("eventModalTitle").textContent = ev ? "Termin bearbeiten" : "Neuer Termin";
-  document.getElementById("editEventId").value  = ev ? ev.id : "";
-  document.getElementById("evTitel").value      = ev ? ev.titel : "";
-  document.getElementById("evDesc").value       = ev ? (ev.beschreibung||"") : "";
-  document.getElementById("evDatum").value      = ev ? ev.datum : (calSelectedDate||"");
-  document.getElementById("evTime").value       = ev ? (ev.uhrzeit||"") : "";
-  // Render assignee checkboxes
-  const container = document.getElementById("evAssignees");
-  const checked   = ev ? (ev.assignees||[]) : [];
-  container.innerHTML = allUsers.map(u => `
-    <label class="ev-check-row">
-      <input type="checkbox" value="${u.id}" ${checked.includes(u.id)?"checked":""}>
-      <span class="ev-check-label">${u.vorname} ${u.nachname}${u.org?" · "+u.org:""}</span>
-    </label>`).join("");
-  document.getElementById("eventModal").classList.add("open");
-  setTimeout(() => document.getElementById("evTitel").focus(), 80);
-}
-function closeEventModal() { document.getElementById("eventModal").classList.remove("open"); }
-
-function editEvent(id) { openEventModal(calEvents.find(e => e.id===id)); }
-
-async function saveEvent() {
-  const titel = document.getElementById("evTitel").value.trim();
-  const datum = document.getElementById("evDatum").value;
-  if (!titel || !datum) { toast("⚠️ Bitte Titel und Datum ausfüllen", true); return; }
-  const assignees = [...document.querySelectorAll("#evAssignees input:checked")].map(i => i.value);
-  const data = {
-    titel,
-    beschreibung: document.getElementById("evDesc").value.trim(),
-    datum,
-    uhrzeit: document.getElementById("evTime").value || null,
-    assignees,
-    erstellt_von: currentUser.id
-  };
-  setBtnLoading("evSaveBtn", true);
-  const editId = document.getElementById("editEventId").value;
-  if (editId) {
-    const { error } = await sb.from("events").update(data).eq("id", editId);
-    if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("evSaveBtn", false); return; }
-    const idx = calEvents.findIndex(e => e.id===editId);
-    if (idx>-1) calEvents[idx] = { ...calEvents[idx], ...data };
-    toast("✅ Termin aktualisiert");
-  } else {
-    const { data:inserted, error } = await sb.from("events").insert(data).select().single();
-    if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("evSaveBtn", false); return; }
-    calEvents.push(inserted);
-    toast("✅ Termin erstellt");
-  }
-  setBtnLoading("evSaveBtn", false);
-  closeEventModal();
-  renderCalendar();
-  if (calSelectedDate) renderCalDay(calSelectedDate);
-}
-
-async function deleteEvent(id) {
-  if (!confirm("Termin wirklich löschen?")) return;
-  const { error } = await sb.from("events").delete().eq("id", id);
-  if (error) { toast("❌ Fehler: "+error.message, true); return; }
-  calEvents = calEvents.filter(e => e.id!==id);
-  renderCalendar();
-  if (calSelectedDate) renderCalDay(calSelectedDate);
-  toast("✅ Termin gelöscht");
-}
-
-function dateToISO(d) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
 /* ═══ UTILS ═══ */
 function setLoading(on, msg="Portal wird geöffnet …", sub="Einen Moment bitte") {
   document.getElementById("loadingMsg").textContent = msg;
@@ -1752,4 +1451,8 @@ function toast(msg, err=false) {
   clearTimeout(el._t);
   el._t = setTimeout(() => el.style.display="none", 3000);
 }
-function show(id, d="block") { do
+function show(id, d="block") { document.getElementById(id).style.display = d; }
+function hide(id)            { document.getElementById(id).style.display = "none"; }
+</script>
+</body>
+</html>
