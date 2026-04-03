@@ -8,30 +8,36 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  /* Basisfarben */
-  --bg:#f5f7fa;
-  --surface:#ffffff;
-  --card:#ffffff;
-  --card-hover:#f1f3f6;
+  /* Light Theme Tokens */
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --card-hover: #f2f6ff;
 
   /* Akzentfarben */
-  --accent:#007aff;
-  --accent2:#5b41df;
-  --accent-glow:rgba(0,122,255,0.15);
+  --accent: #2563eb;
+  --accent2: #7c3aed;
+  --accent-glow: rgba(37,99,235,0.15);
 
   /* Text */
-  --text:#1a1a1a;
-  --muted:#6b7280;
+  --text: #0f172a;
+  --muted: #5b6b7c;
 
   /* Rahmen */
-  --border:rgba(0,0,0,0.08);
-  --border-accent:rgba(0,122,255,0.3);
-}
+  --border: rgba(15,23,42,0.10);
+  --border-accent: rgba(37,99,235,0.28);
+
+  /* Schatten */
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+  --shadow-md: 0 16px 40px rgba(15,23,42,0.08);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body {
   background: var(--bg);
   color: var(--text);
+  font-family:'Calibri','Segoe UI',Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
 body::before,
@@ -48,7 +54,7 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .hbadge.admin-b{background:rgba(123,97,255,.18);border:1px solid rgba(123,97,255,.4);color:#a78bfa}
 .hbadge.user-b{background:var(--card);border:1px solid var(--border-accent);color:var(--accent)}
 .hbadge.visible{display:flex}
-.hbtn{display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;width:auto;border:1px solid}
+.hbtn{display:none;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:.8rem;font-family:'Calibri','Segoe UI',Arial,sans-serif;cursor:pointer;transition:all .2s;width:auto;border:1px solid}
 .hbtn.admin-pg{border-color:rgba(123,97,255,.45);background:transparent;color:#a78bfa}
 .hbtn.admin-pg:hover{background:rgba(123,97,255,.14);transform:translateY(-1px);box-shadow:none}
 .hbtn.logout{border-color:rgba(255,80,80,.4);background:transparent;color:#ff6b6b}
@@ -68,15 +74,17 @@ main{position:relative;z-index:1;display:flex;justify-content:center;align-items
     max-width: 1200px;
     align-items: flex-start;
 
-    /* Helles Design */
-    background-color: #f5f7fa;
-    color: #1a1a1a;
+    /* Light Theme */
+    background-color: var(--bg);
+    color: var(--text);
     padding: 20px;
     border-radius: 12px;
+    border:1px solid var(--border);
+    box-shadow: var(--shadow-sm);
 }
 /* SIDEBAR */
 .sidebar{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;position:sticky;top:88px;animation:fadeUp .5s ease both}
-.sidebar-card{background:#ffffff(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.sidebar-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-sm)}
 .sidebar-section-title{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .sidebar-contact{display:flex;flex-direction:column;gap:6px}
 .sidebar-contact-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:var(--accent)}
@@ -102,20 +110,20 @@ main{position:relative;z-index:1;display:flex;justify-content:center;align-items
 .login-header{text-align:center;margin-bottom:36px;width:100%}
 .login-header h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem}
 .login-header p{margin-top:6px;font-size:.88rem;color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,.5);width:100%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:var(--shadow-md);width:100%}
 .field{margin-bottom:16px}
 .field label,.flabel{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-bottom:7px;letter-spacing:.06em;text-transform:uppercase}
-input,select,textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.93rem;outline:none;transition:border-color .2s,box-shadow .2s}
+input,select,textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.93rem;outline:none;transition:border-color .2s,box-shadow .2s}
 input:focus,select:focus,textarea:focus{border-color:var(--border-accent);box-shadow:0 0 0 3px var(--accent-glow)}
-select option{background:#0d1219}
+select option{background:var(--surface);color:var(--text)}
 textarea{resize:vertical;min-height:80px}
-.btn-primary{width:100%;margin-top:8px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;letter-spacing:.04em;transition:all .25s}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,229,255,.35)}
+.btn-primary{width:100%;margin-top:8px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;letter-spacing:.04em;transition:all .25s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.30)}
 .error-msg{margin-top:12px;padding:12px 16px;border-radius:10px;background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff8080;font-size:.85rem;display:none;text-align:center;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.02em}
 
 /* LOADING */
 .loading-wrap{text-align:center;display:none;flex-direction:column;align-items:center;gap:20px;animation:fadeUp .4s ease both}
-.loading-wrap .load-card{background:var(--card);border:1px solid var(--border-accent);border-radius:20px;padding:40px 48px;box-shadow:0 24px 64px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:20px}
+.loading-wrap .load-card{background:var(--card);border:1px solid var(--border-accent);border-radius:20px;padding:40px 48px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;align-items:center;gap:20px}
 .loading-wrap h2{font-family:'Syne',sans-serif;font-size:1.1rem;color:var(--text);font-weight:700;margin:0}
 .loading-wrap p{font-size:.82rem;color:var(--muted);margin:0}
 .loader-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .85s linear infinite}
@@ -126,7 +134,7 @@ textarea{resize:vertical;min-height:80px}
 .tab-bar{display:flex;gap:4px;margin-bottom:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px}
 .tab-btn{flex:1;padding:10px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;width:auto}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04);box-shadow:none;transform:none}
-.tab-btn.active{background:var(--surface);color:var(--accent);border:1px solid var(--border-accent);box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.tab-btn.active{background:var(--surface);color:var(--accent);border:1px solid var(--border-accent);box-shadow:0 10px 24px rgba(15,23,42,0.08)}
 .tab-panel{display:none}
 .tab-panel.active{display:block;animation:fadeUp .3s ease both}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -134,7 +142,7 @@ textarea{resize:vertical;min-height:80px}
 .sec-title::before{content:'';width:3px;height:12px;background:var(--accent);border-radius:2px;display:inline-block}
 
 /* APPS */
-.app-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;margin-bottom:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s;text-align:left}
+.app-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;margin-bottom:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s;text-align:left}
 .app-btn:last-child{margin-bottom:0}
 .app-btn:hover{background:var(--card-hover);border-color:var(--border-accent);transform:translateX(4px);box-shadow:none}
 .app-arrow{color:var(--accent);opacity:0;transition:opacity .2s,transform .2s}
@@ -144,8 +152,8 @@ textarea{resize:vertical;min-height:80px}
 /* DIRECTORY */
 .search-row{display:flex;gap:8px;margin-bottom:14px}
 .search-row input{flex:1}
-.sbtn{padding:10px 16px;border-radius:10px;border:none;background:var(--accent);color:#001a1f;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;width:auto;transition:all .2s;flex-shrink:0}
-.sbtn:hover{box-shadow:0 4px 16px rgba(0,229,255,.35);transform:translateY(-1px)}
+.sbtn{padding:10px 16px;border-radius:10px;border:none;background:var(--accent);color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;width:auto;transition:all .2s;flex-shrink:0}
+.sbtn:hover{box-shadow:0 4px 16px rgba(37,99,235,.30);transform:translateY(-1px)}
 .emp-list-box{max-height:300px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .emp-card{padding:13px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);margin-bottom:8px;transition:all .2s}
 .emp-card:hover{border-color:var(--border-accent);background:var(--card-hover)}
@@ -161,7 +169,7 @@ textarea{resize:vertical;min-height:80px}
 .news-item{display:flex;gap:16px;padding:16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);transition:all .2s;animation:fadeUp .4s ease both}
 .news-item:hover{border-color:var(--border-accent);background:var(--card-hover)}
 .news-tag{flex-shrink:0;align-self:flex-start;padding:3px 9px;border-radius:5px;font-size:.68rem;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.tag-info{background:rgba(0,229,255,.12);color:var(--accent)}
+.tag-info{background:rgba(37,99,235,.12);color:var(--accent)}
 .tag-update{background:rgba(123,97,255,.15);color:#a78bfa}
 .tag-event{background:rgba(34,197,94,.12);color:#4ade80}
 .tag-wichtig{background:rgba(251,191,36,.12);color:#fbbf24}
@@ -172,8 +180,8 @@ textarea{resize:vertical;min-height:80px}
 
 /* TASKS */
 .row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.btn-add{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
-.btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,229,255,.3)}
+.btn-add{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
+.btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.28)}
 .filter-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
 .chip{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .2s;width:auto}
 .chip:hover{border-color:var(--border-accent);color:var(--text);box-shadow:none;transform:none}
@@ -186,7 +194,7 @@ textarea{resize:vertical;min-height:80px}
 .tcheck{width:20px;height:20px;flex-shrink:0;margin-top:2px;border-radius:6px;border:2px solid var(--border-accent);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .tcheck:hover{background:var(--accent-glow)}
 .tcheck.checked{background:var(--accent);border-color:var(--accent)}
-.tcheck.checked::after{content:'✓';font-size:.72rem;color:#001a1f;font-weight:900}
+.tcheck.checked::after{content:'✓';font-size:.72rem;color:var(--text);font-weight:900}
 .task-body{flex:1;min-width:0}
 .task-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:3px}
 .task-desc{font-size:.8rem;color:var(--muted);margin-top:3px;line-height:1.4}
@@ -207,7 +215,7 @@ textarea{resize:vertical;min-height:80px}
 .admin-page{display:none;width:100%;max-width:1000px;animation:fadeUp .4s ease both;align-self:flex-start}
 .admin-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
 .admin-page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem}
-.back-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;transition:all .2s;width:auto}
+.back-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.88rem;cursor:pointer;transition:all .2s;width:auto}
 .back-btn:hover{border-color:var(--border-accent);color:var(--text);box-shadow:none;transform:none}
 .admin-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px}
 .atab{flex:1;padding:10px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;width:auto}
@@ -232,9 +240,9 @@ textarea{resize:vertical;min-height:80px}
 .btn-purple{padding:11px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#7b61ff,#5b41df);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;width:auto;display:inline-flex;align-items:center;gap:7px}
 .btn-purple:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(123,97,255,.4)}
 .btn-purple:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-outline-red{padding:8px 14px;border-radius:8px;border:1px solid rgba(239,68,68,.4);background:transparent;color:#f87171;font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
+.btn-outline-red{padding:8px 14px;border-radius:8px;border:1px solid rgba(239,68,68,.4);background:transparent;color:#f87171;font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
 .btn-outline-red:hover{background:rgba(239,68,68,.1);box-shadow:none;transform:none}
-.btn-outline{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
+.btn-outline{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto}
 .btn-outline:hover{border-color:var(--border-accent);color:var(--text);box-shadow:none;transform:none}
 .app-assign-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;margin-bottom:14px}
 .app-check-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s}
@@ -249,7 +257,7 @@ textarea{resize:vertical;min-height:80px}
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;display:none}
 .modal-overlay.open{display:flex;animation:fadeIn .2s ease both}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{width:100%;max-width:460px;margin:20px;background:var(--card);border:1px solid var(--border-accent);border-radius:20px;padding:32px;box-shadow:0 30px 80px rgba(0,0,0,.7);animation:fadeUp .25s ease both}
+.modal{width:100%;max-width:460px;margin:20px;background:var(--card);border:1px solid var(--border-accent);border-radius:20px;padding:32px;box-shadow:0 30px 80px rgba(15,23,42,0.18);animation:fadeUp .25s ease both}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem}
 .modal-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0}
@@ -257,10 +265,10 @@ textarea{resize:vertical;min-height:80px}
 .modal-field{margin-bottom:16px}
 .modal-field label{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-bottom:7px;letter-spacing:.06em;text-transform:uppercase}
 .modal-footer{display:flex;gap:10px;margin-top:20px}
-.btn-cancel{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-cancel{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-weight:500;cursor:pointer;transition:all .2s}
 .btn-cancel:hover{border-color:var(--border-accent);color:var(--text);box-shadow:none;transform:none}
-.btn-save{flex:2;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .2s}
-.btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,229,255,.3)}
+.btn-save{flex:2;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .2s}
+.btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.28)}
 
 /* TOAST */
 .toast{position:fixed;bottom:28px;right:28px;z-index:999;padding:12px 20px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;display:none;animation:fadeUp .3s ease both}
@@ -273,7 +281,7 @@ textarea{resize:vertical;min-height:80px}
 .chat-conv-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s}
 .chat-conv-item:hover{border-color:var(--border-accent);background:var(--card-hover)}
 .chat-conv-active{border-color:var(--border-accent) !important;background:var(--accent-glow) !important}
-.chat-conv-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#00e5ff,#00bcd4);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:#001a1f;flex-shrink:0}
+.chat-conv-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--text);flex-shrink:0}
 .chat-conv-info{flex:1;min-width:0}
 .chat-conv-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:3px}
 .chat-conv-preview{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -285,14 +293,14 @@ textarea{resize:vertical;min-height:80px}
 .chat-msg.me{align-self:flex-end;align-items:flex-end}
 .chat-msg.them{align-self:flex-start;align-items:flex-start}
 .chat-bubble{padding:10px 14px;border-radius:14px;font-size:.88rem;line-height:1.5;word-break:break-word}
-.chat-msg.me .chat-bubble{background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;border-bottom-right-radius:4px}
+.chat-msg.me .chat-bubble{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--text);border-bottom-right-radius:4px}
 .chat-msg.them .chat-bubble{background:var(--surface);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px}
 .chat-time{font-size:.68rem;color:var(--muted);margin-top:4px;padding:0 4px}
 .chat-input-row{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--border);background:var(--surface)}
 .chat-input-row input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s}
 .chat-input-row input:focus{border-color:var(--border-accent)}
-.chat-send-btn{width:42px;height:42px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e5ff,#00bcd4);color:#001a1f;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;padding:0}
-.chat-send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,229,255,.3)}
+.chat-send-btn{width:42px;height:42px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;padding:0}
+.chat-send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(37,99,235,.26)}
 .chat-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0}
 
 @media(max-width:900px){.sidebar{display:none}}
@@ -303,9 +311,34 @@ textarea{resize:vertical;min-height:80px}
   .tab-btn,.atab{font-size:.7rem;padding:8px 6px}
 }
 /* PW CHANGE */
-.pw-req{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.8;padding:10px 14px;border-radius:8px;background:rgba(0,229,255,.05);border:1px solid var(--border)}
+.pw-req{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.8;padding:10px 14px;border-radius:8px;background:rgba(37,99,235,.05);border:1px solid var(--border)}
 .pw-req .ok{color:#4ade80}
 .pw-req .no{color:var(--muted)}
+
+/* CALENDAR */
+.calendar-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.calendar-month{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--text);letter-spacing:.02em;flex:1;text-align:center}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.cal-weekday{font-family:'Syne',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 6px}
+.cal-day{min-height:96px;border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:10px;transition:all .15s;cursor:pointer;display:flex;flex-direction:column}
+.cal-day:hover{border-color:var(--border-accent);background:var(--card-hover);transform:translateY(-1px)}
+.cal-day.cal-out{opacity:.45}
+.cal-day.cal-today{border-color:var(--border-accent);box-shadow:var(--shadow-sm)}
+.cal-day.cal-selected{border-color:rgba(37,99,235,.55);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.cal-day-num{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;margin-bottom:6px}
+.cal-day-events{display:flex;flex-direction:column;gap:6px;margin-top:auto}
+.cal-event-chip{padding:3px 8px;border-radius:999px;border:1px solid rgba(37,99,235,.28);background:rgba(37,99,235,.12);color:var(--accent);font-size:.72rem;font-family:'Calibri','Segoe UI',Arial,sans-serif;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-more{color:var(--muted);font-size:.72rem;font-weight:800}
+.calendar-events-list{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding-right:6px}
+.cal-event-row{display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface)}
+.cal-event-row:hover{border-color:var(--border-accent);background:var(--card-hover)}
+.cal-event-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.cal-event-main{flex:1;min-width:0}
+.cal-event-title{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-event-sub{font-size:.8rem;color:var(--muted);line-height:1.35}
+.cal-event-actions{display:flex;gap:8px;flex-shrink:0}
+#calendarDayModal{z-index:205}
+#calendarEventModal{z-index:210}
 </style>
 </head>
 <body>
@@ -388,7 +421,7 @@ textarea{resize:vertical;min-height:80px}
       <div class="sidebar-contact">
         <div class="sidebar-contact-name">UserHelpDesk</div>
         <div class="sidebar-contact-row">
-          📞 <a href="tel:+4915901993688">+49 159 01993688</a>
+          📞 <a href="tel:+4915901993688">+49 1590 1993688</a>
         </div>
         <div class="sidebar-contact-row">
           ✉️ <a href="mailto:LSchwickert.BYOD@outlook.de">HelpDesk schreiben</a>
@@ -421,6 +454,7 @@ textarea{resize:vertical;min-height:80px}
       <div class="sidebar-section-title">Schnellzugriff</div>
       <div onclick="switchTab('tasks')" class="sidebar-quick-link">📋 Meine Aufgaben</div>
       <div onclick="switchTab('news')"  class="sidebar-quick-link">📰 Neuigkeiten</div>
+      <div onclick="switchTab('calendar')" class="sidebar-quick-link">📅 Kalender</div>
       <div onclick="switchTab('chat')"  class="sidebar-quick-link">💬 Chat</div>
     </div>
   </aside>
@@ -432,6 +466,7 @@ textarea{resize:vertical;min-height:80px}
     <button class="tab-btn"        onclick="switchTab('tasks')">Aufgaben</button>
     <button class="tab-btn"        onclick="switchTab('news')">Neuigkeiten</button>
     <button class="tab-btn"        onclick="switchTab('directory')">Verzeichnis</button>
+    <button class="tab-btn"        onclick="switchTab('calendar')">📅 Kalender</button>
     <button class="tab-btn"        onclick="switchTab('chat')" id="chatTabBtn">💬 Chat</button>
   </div>
 
@@ -480,6 +515,22 @@ textarea{resize:vertical;min-height:80px}
         <button class="sbtn" onclick="searchEmployees()">Suchen</button>
       </div>
       <div class="emp-list-box" id="employeeList"><div class="hint">Suche starten, um Mitarbeiter zu finden</div></div>
+    </div>
+  </div>
+
+  <!-- Kalender -->
+  <div class="tab-panel" id="tab-calendar">
+    <div class="sec-title">Echtzeit Kalender</div>
+    <div class="card">
+      <div class="calendar-toolbar">
+        <button class="icon-btn" onclick="calendarPrevMonth()" aria-label="Vorheriger Monat">←</button>
+        <div class="calendar-month" id="calendarMonthTitle">—</div>
+        <button class="icon-btn" onclick="calendarNextMonth()" aria-label="Nächster Monat">→</button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+          <button class="btn-add" onclick="openCalendarEventModal(null, calendarSelectedDate || null)">＋ Event</button>
+        </div>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
     </div>
   </div>
 
@@ -649,6 +700,73 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
+<!-- Calendar Day Modal -->
+<div class="modal-overlay" id="calendarDayModal">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-header">
+      <div class="modal-title" id="calendarDayModalTitle">Tagesansicht</div>
+      <button class="modal-close" onclick="closeCalendarDayModal()">✕</button>
+    </div>
+    <div class="calendar-events-list" id="calendarDayEventsList">
+      <div class="hint">Lade Events …</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeCalendarDayModal()">Schließen</button>
+      <button class="btn-save" onclick="openCalendarEventModal(null, calendarSelectedDate)">＋ Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar Event Modal -->
+<div class="modal-overlay" id="calendarEventModal">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-header">
+      <div class="modal-title" id="calendarEventModalTitle">Event</div>
+      <button class="modal-close" onclick="closeCalendarEventModal()">✕</button>
+    </div>
+    <input type="hidden" id="calEditId">
+
+    <div class="modal-field">
+      <label>Titel</label>
+      <input type="text" id="calTitle" placeholder="Event-Titel …">
+    </div>
+
+    <div class="modal-field">
+      <label>Beschreibung (optional)</label>
+      <textarea id="calDesc" placeholder="Details …"></textarea>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field span2">
+        <label>Datum</label>
+        <input type="date" id="calDate">
+      </div>
+      <div class="form-field">
+        <label>Start</label>
+        <input type="time" id="calTimeStart">
+      </div>
+      <div class="form-field">
+        <label>Ende</label>
+        <input type="time" id="calTimeEnd">
+      </div>
+      <div class="form-field span2">
+        <label>Typ</label>
+        <input type="text" id="calType" placeholder="z. B. Meeting, Urlaub, Info …">
+      </div>
+      <div class="form-field span2">
+        <label>Zugewiesen an (optional)</label>
+        <select id="calAssignedTo"></select>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="align-items:center">
+      <button class="btn-outline-red" id="calendarEventDeleteBtn" onclick="deleteCalendarEvent()" style="display:none">🗑 Löschen</button>
+      <button class="btn-cancel" onclick="closeCalendarEventModal()">Abbrechen</button>
+      <button class="btn-save" onclick="saveCalendarEvent()">Speichern</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -673,6 +791,11 @@ let appLib      = [];
 let newsItems   = [];
 let tasks       = [];
 let activeFilter = "alle";
+let calendarEvents = [];
+let calendarLoaded = false;
+let calendarSubscription = null;
+let calendarCurrentMonth = new Date();
+let calendarSelectedDate = null; // ISO: YYYY-MM-DD
 const tagLabels  = { info:"Info", update:"Update", event:"Event", wichtig:"Wichtig" };
 
 /* ═══ INIT ═══ */
@@ -775,8 +898,10 @@ async function loadAllData() {
 
 function logout() {
   if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null; }
+  if (calendarSubscription) { calendarSubscription.unsubscribe(); calendarSubscription = null; }
   activeChatPartner = null; chatMessages = [];
   currentUser = null; allUsers = []; appLib = []; newsItems = []; tasks = [];
+  calendarEvents = []; calendarLoaded = false; calendarSelectedDate = null; calendarCurrentMonth = new Date();
   hide("dashboardView"); hide("adminPage"); hide("pwChangeView"); hide("intranetLayout");
   ["userBadge","adminBadge","adminPageBtn","logoutBtn"].forEach(id => document.getElementById(id).classList.remove("visible"));
   ["username","password","searchInput","newPw1","newPw2"].forEach(id => document.getElementById(id).value = "");
@@ -825,11 +950,12 @@ async function showAdminPage() {
 
 /* ═══ TABS ═══ */
 function switchTab(name) {
-  const names = ["overview","tasks","news","directory","chat"];
+  const names = ["overview","tasks","news","directory","calendar","chat"];
   document.querySelectorAll(".tab-btn").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.getElementById("tab-"+name).classList.add("active");
   if (name === "chat") initChatTab();
+  if (name === "calendar") initCalendarTab();
 }
 function switchAdminTab(name) {
   const names = ["employees","apps","news"];
@@ -884,6 +1010,398 @@ function searchEmployees() {
       <div class="emp-details">📞 ${e.tel||"—"}<br>✉️ <a href="mailto:${e.email}">${e.email||"—"}</a>${e.org ? `<br>🏢 ${e.org}` : ""}</div>
     </div>`).join("");
 }
+
+/* ═══ CALENDAR (Realtime) ═══ */
+function isoFromDateLocal(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function parseIsoDate(iso) {
+  if (!iso) return null;
+  const parts = String(iso).split("-");
+  if (parts.length !== 3) return null;
+  const y = Number(parts[0]);
+  const m = Number(parts[1]);
+  const d = Number(parts[2]);
+  if (!y || !m || !d) return null;
+  return new Date(y, m-1, d);
+}
+
+function calTimeToShort(t) {
+  if (!t) return "";
+  return String(t).slice(0, 5);
+}
+
+function calEventTime(ev) {
+  const s = calTimeToShort(ev.time_start);
+  const e = calTimeToShort(ev.time_end);
+  if (s && e) return `${s} - ${e}`;
+  if (s) return s;
+  return "";
+}
+
+function calEventAssigneeLabel(ev) {
+  if (!ev.assigned_to) return "Für alle";
+  const u = allUsers.find(x => x.id === ev.assigned_to);
+  if (!u) return ev.assigned_to;
+  return `${u.vorname} ${u.nachname}`;
+}
+
+function isEventVisible(ev) {
+  if (!currentUser) return false;
+  if (currentUser.admin) return true;
+  if (!ev.assigned_to) return true; // null/empty => sichtbar für alle
+  return ev.assigned_to === currentUser.id;
+}
+
+function calTypePalette(type) {
+  const t = String(type || "").toLowerCase();
+  const warn = t.includes("wichtig") || t.includes("urgent") || t.includes("kritisch");
+  const ok   = t.includes("event") || t.includes("term") || t.includes("meeting");
+  if (warn) return { bg:"rgba(239,68,68,.12)", border:"rgba(239,68,68,.30)", fg:"#f87171", dot:"#f87171" };
+  if (ok)   return { bg:"rgba(34,197,94,.10)", border:"rgba(34,197,94,.26)", fg:"#4ade80", dot:"#4ade80" };
+
+  // default: accent / accent2 by simple hash
+  const hash = String(type || "").split("").reduce((a,c) => a + c.charCodeAt(0), 0) % 2;
+  if (hash === 0) return { bg:"rgba(37,99,235,.12)", border:"rgba(37,99,235,.28)", fg:"var(--accent)", dot:"var(--accent)" };
+  return { bg:"rgba(124,58,237,.12)", border:"rgba(124,58,237,.28)", fg:"var(--accent2)", dot:"var(--accent2)" };
+}
+
+function sortCalendarEvents(list) {
+  list.sort((a,b) => {
+    const ad = a.date || "";
+    const bd = b.date || "";
+    if (ad !== bd) return ad.localeCompare(bd);
+    const at = a.time_start || "";
+    const bt = b.time_start || "";
+    return at.localeCompare(bt);
+  });
+  return list;
+}
+
+async function initCalendarTab() {
+  if (!currentUser) return;
+  if (!calendarLoaded) {
+    await loadCalendarEvents();
+    ensureCalendarRealtime();
+    calendarLoaded = true;
+  } else {
+    ensureCalendarRealtime();
+  }
+  // Render Month (selected day stays highlighted)
+  renderCalendarMonth();
+}
+
+async function loadCalendarEvents() {
+  const { data, error } = await sb.from("events").select("id, title, description, date, time_start, time_end, type, created_by, assigned_to, created_at");
+  if (error) {
+    toast("❌ Kalender konnte nicht geladen werden: " + error.message, true);
+    calendarEvents = [];
+    return;
+  }
+  calendarEvents = data || [];
+  sortCalendarEvents(calendarEvents);
+}
+
+function ensureCalendarRealtime() {
+  if (calendarSubscription) return;
+
+  calendarSubscription = sb.channel("calendar-events");
+  calendarSubscription
+    .on("postgres_changes", { event:"INSERT", schema:"public", table:"events" }, payload => {
+      const ev = payload.new;
+      if (!ev || !ev.id) return;
+      const idx = calendarEvents.findIndex(x => x.id === ev.id);
+      if (idx >= 0) calendarEvents[idx] = ev; else calendarEvents.push(ev);
+      sortCalendarEvents(calendarEvents);
+      if (document.getElementById("tab-calendar")?.classList.contains("active")) renderCalendarMonth();
+      if (calendarSelectedDate && document.getElementById("calendarDayModal")?.classList.contains("open")) renderCalendarDayEvents();
+    })
+    .on("postgres_changes", { event:"UPDATE", schema:"public", table:"events" }, payload => {
+      const ev = payload.new;
+      if (!ev || !ev.id) return;
+      const idx = calendarEvents.findIndex(x => x.id === ev.id);
+      if (idx >= 0) calendarEvents[idx] = ev; else calendarEvents.push(ev);
+      sortCalendarEvents(calendarEvents);
+      if (document.getElementById("tab-calendar")?.classList.contains("active")) renderCalendarMonth();
+      if (calendarSelectedDate && document.getElementById("calendarDayModal")?.classList.contains("open")) renderCalendarDayEvents();
+    })
+    .on("postgres_changes", { event:"DELETE", schema:"public", table:"events" }, payload => {
+      const oldEv = payload.old;
+      const id = oldEv && oldEv.id;
+      if (!id) return;
+      calendarEvents = calendarEvents.filter(x => x.id !== id);
+      if (document.getElementById("tab-calendar")?.classList.contains("active")) renderCalendarMonth();
+      if (calendarSelectedDate && document.getElementById("calendarDayModal")?.classList.contains("open")) renderCalendarDayEvents();
+    })
+    .subscribe();
+}
+
+function calendarPrevMonth() {
+  calendarCurrentMonth = new Date(calendarCurrentMonth.getFullYear(), calendarCurrentMonth.getMonth()-1, 1);
+  renderCalendarMonth();
+}
+
+function calendarNextMonth() {
+  calendarCurrentMonth = new Date(calendarCurrentMonth.getFullYear(), calendarCurrentMonth.getMonth()+1, 1);
+  renderCalendarMonth();
+}
+
+function renderCalendarMonth() {
+  const grid = document.getElementById("calendarGrid");
+  if (!grid) return;
+
+  const monthStart = new Date(calendarCurrentMonth.getFullYear(), calendarCurrentMonth.getMonth(), 1);
+  const jsDay = monthStart.getDay(); // 0=Sonntag
+  const mondayOffset = (jsDay + 6) % 7; // 0=Montag
+  const startDate = new Date(monthStart);
+  startDate.setDate(monthStart.getDate() - mondayOffset);
+
+  document.getElementById("calendarMonthTitle").textContent =
+    calendarCurrentMonth.toLocaleDateString("de-DE", { month:"long", year:"numeric" });
+
+  const weekdays = ["Mo","Di","Mi","Do","Fr","Sa","So"];
+
+  // Build index for visible events (performance)
+  const visibleByDate = {};
+  for (const ev of calendarEvents) {
+    if (!isEventVisible(ev)) continue;
+    const d = ev.date;
+    if (!d) continue;
+    if (!visibleByDate[d]) visibleByDate[d] = [];
+    visibleByDate[d].push(ev);
+  }
+  Object.keys(visibleByDate).forEach(k => sortCalendarEvents(visibleByDate[k]));
+
+  grid.innerHTML = "";
+
+  weekdays.forEach(w => {
+    const el = document.createElement("div");
+    el.className = "cal-weekday";
+    el.textContent = w;
+    grid.appendChild(el);
+  });
+
+  const todayIso = isoFromDateLocal(new Date());
+
+  for (let i=0; i<42; i++) {
+    const cellDate = new Date(startDate);
+    cellDate.setDate(startDate.getDate() + i);
+    const iso = isoFromDateLocal(cellDate);
+    const inMonth = cellDate.getMonth() === monthStart.getMonth();
+
+    const dayEvents = (visibleByDate[iso] || []);
+    const top = dayEvents.slice(0, 3);
+    const more = Math.max(0, dayEvents.length - top.length);
+
+    const cell = document.createElement("div");
+    cell.className = "cal-day" + (inMonth ? "" : " cal-out") +
+      (iso === todayIso ? " cal-today" : "") +
+      (iso === calendarSelectedDate ? " cal-selected" : "");
+    cell.onclick = () => openCalendarDayModal(iso);
+
+    const topHtml = top.map(ev => {
+      const pal = calTypePalette(ev.type);
+      const chipText = `${calTimeToShort(ev.time_start) ? (calTimeToShort(ev.time_start) + " ") : ""}${ev.title || ""}`.trim();
+      return `<div class="cal-event-chip" ` +
+        `style="background:${pal.bg};border-color:${pal.border};color:${pal.fg}" ` +
+        `onclick="event.stopPropagation();openCalendarEventModalById('${ev.id}')">` +
+        `${escHtml(chipText)}</div>`;
+    }).join("");
+
+    const moreHtml = more ? `<div class="cal-more">+${more} mehr</div>` : "";
+
+    cell.innerHTML = `
+      <div class="cal-day-num">${cellDate.getDate()}</div>
+      <div class="cal-day-events">
+        ${topHtml}
+        ${moreHtml}
+      </div>
+    `;
+
+    grid.appendChild(cell);
+  }
+}
+
+function openCalendarDayModal(dateIso) {
+  if (!dateIso) return;
+  calendarSelectedDate = dateIso;
+  const modal = document.getElementById("calendarDayModal");
+  document.getElementById("calendarDayModalTitle").textContent =
+    parseIsoDate(dateIso).toLocaleDateString("de-DE", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+  renderCalendarDayEvents();
+  modal.classList.add("open");
+}
+
+function closeCalendarDayModal() {
+  document.getElementById("calendarDayModal").classList.remove("open");
+}
+
+function renderCalendarDayEvents() {
+  const listEl = document.getElementById("calendarDayEventsList");
+  if (!listEl) return;
+  if (!calendarSelectedDate) { listEl.innerHTML = '<div class="hint">Kein Datum ausgewählt</div>'; return; }
+
+  const dayEvents = calendarEvents
+    .filter(ev => ev.date === calendarSelectedDate)
+    .filter(isEventVisible)
+    .slice()
+    .sort((a,b) => (calTimeToShort(a.time_start).localeCompare(calTimeToShort(b.time_start))) );
+
+  if (!dayEvents.length) {
+    listEl.innerHTML = '<div class="hint">Keine Events an diesem Tag</div>';
+    return;
+  }
+
+  listEl.innerHTML = dayEvents.map(ev => {
+    const pal = calTypePalette(ev.type);
+    const time = calEventTime(ev);
+    const ass = calEventAssigneeLabel(ev);
+    return `
+      <div class="cal-event-row" id="cal-row-${ev.id}">
+        <div class="cal-event-dot" style="background:${pal.dot}"></div>
+        <div class="cal-event-main">
+          <div class="cal-event-title">${escHtml(ev.title || "Event")}</div>
+          <div class="cal-event-sub">
+            ${time ? escHtml(time) : ""}${time ? " · " : ""}${ev.type ? escHtml(ev.type) : "—"} · ${escHtml(ass)}
+          </div>
+        </div>
+        <div class="cal-event-actions">
+          <button class="icon-btn" onclick="openCalendarEventModalById('${ev.id}')">✏️</button>
+          <button class="icon-btn del" onclick="deleteCalendarEventById('${ev.id}')">🗑</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openCalendarEventModal(ev, dateIso=null) {
+  const modal = document.getElementById("calendarEventModal");
+  const title = document.getElementById("calendarEventModalTitle");
+  const editId = document.getElementById("calEditId");
+
+  const sel = document.getElementById("calAssignedTo");
+  sel.innerHTML = '<option value="">Für alle</option>' + allUsers.map(u =>
+    `<option value="${u.id}">${escHtml(u.vorname)} ${escHtml(u.nachname)}</option>`
+  ).join("");
+
+  const chosenDate = dateIso || calendarSelectedDate || isoFromDateLocal(new Date());
+
+  const isEdit = !!ev && !!ev.id;
+  editId.value = isEdit ? ev.id : "";
+  title.textContent = isEdit ? "Event bearbeiten" : "Neues Event";
+
+  document.getElementById("calTitle").value = isEdit ? (ev.title || "") : "";
+  document.getElementById("calDesc").value = isEdit ? (ev.description || "") : "";
+  document.getElementById("calDate").value = isEdit ? (ev.date || chosenDate) : chosenDate;
+  document.getElementById("calTimeStart").value = isEdit ? (calTimeToShort(ev.time_start)) : "";
+  document.getElementById("calTimeEnd").value = isEdit ? (calTimeToShort(ev.time_end)) : "";
+  document.getElementById("calType").value = isEdit ? (ev.type || "") : "";
+  document.getElementById("calAssignedTo").value = isEdit ? (ev.assigned_to || "") : "";
+
+  document.getElementById("calendarEventDeleteBtn").style.display = isEdit ? "inline-flex" : "none";
+
+  modal.classList.add("open");
+  setTimeout(() => document.getElementById("calTitle").focus(), 80);
+}
+
+function openCalendarEventModalById(id) {
+  const ev = calendarEvents.find(x => x.id === id);
+  if (!ev) return;
+  openCalendarEventModal(ev, ev.date || calendarSelectedDate || null);
+}
+
+function closeCalendarEventModal() {
+  document.getElementById("calendarEventModal").classList.remove("open");
+}
+
+async function saveCalendarEvent() {
+  const editId = document.getElementById("calEditId").value.trim();
+  const title = document.getElementById("calTitle").value.trim();
+  const description = document.getElementById("calDesc").value.trim();
+  const date = document.getElementById("calDate").value;
+  const time_start = document.getElementById("calTimeStart").value || null;
+  const time_end = document.getElementById("calTimeEnd").value || null;
+  const type = document.getElementById("calType").value.trim() || null;
+  const assigned_to = document.getElementById("calAssignedTo").value || null;
+
+  if (!title || !date) { toast("⚠️ Bitte Titel und Datum ausfüllen", true); return; }
+
+  const payloadBase = { title, description: description || null, date, time_start, time_end, type, assigned_to };
+
+  if (editId) {
+    const { data:updated, error } = await sb.from("events")
+      .update(payloadBase)
+      .eq("id", editId)
+      .select("id, title, description, date, time_start, time_end, type, created_by, assigned_to, created_at")
+      .single();
+
+    if (error) { toast("❌ Fehler beim Aktualisieren: " + error.message, true); return; }
+
+    // Optimistic local update (realtime will also catch up)
+    const idx = calendarEvents.findIndex(x => x.id === editId);
+    if (idx >= 0) calendarEvents[idx] = updated; else calendarEvents.push(updated);
+    sortCalendarEvents(calendarEvents);
+    toast("✅ Event aktualisiert");
+  } else {
+    const payload = { ...payloadBase, created_by: currentUser.id };
+    const { data:inserted, error } = await sb.from("events")
+      .insert(payload)
+      .select("id, title, description, date, time_start, time_end, type, created_by, assigned_to, created_at")
+      .single();
+
+    if (error) { toast("❌ Fehler beim Erstellen: " + error.message, true); return; }
+
+    calendarEvents.push(inserted);
+    sortCalendarEvents(calendarEvents);
+    toast("✅ Event erstellt");
+  }
+
+  calendarSelectedDate = date;
+  renderCalendarMonth();
+  if (document.getElementById("calendarDayModal")?.classList.contains("open")) renderCalendarDayEvents();
+  closeCalendarEventModal();
+}
+
+async function deleteCalendarEventById(id) {
+  if (!id) return;
+  if (!confirm("Event wirklich löschen?")) return;
+  const { error } = await sb.from("events").delete().eq("id", id);
+  if (error) { toast("❌ Fehler beim Löschen: " + error.message, true); return; }
+  calendarEvents = calendarEvents.filter(x => x.id !== id);
+  toast("✅ Event gelöscht");
+  if (document.getElementById("calendarDayModal")?.classList.contains("open")) renderCalendarDayEvents();
+  renderCalendarMonth();
+  if (document.getElementById("calendarEventModal")?.classList.contains("open") &&
+      document.getElementById("calEditId").value.trim() === id) {
+    closeCalendarEventModal();
+  }
+}
+
+function deleteCalendarEvent() {
+  const id = document.getElementById("calEditId").value.trim();
+  if (!id) return;
+  deleteCalendarEventById(id);
+}
+
+document.getElementById("calendarDayModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("calendarDayModal")) closeCalendarDayModal();
+});
+
+document.getElementById("calendarEventModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("calendarEventModal")) closeCalendarEventModal();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    // taskModal has its own Escape handler - we only close calendar modals here.
+    closeCalendarDayModal();
+    closeCalendarEventModal();
+  }
+});
 
 /* ═══ TASKS ═══ */
 function getFiltered() {
