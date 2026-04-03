@@ -307,8 +307,30 @@ textarea{resize:vertical;min-height:80px}
 @media(max-width:700px){
   .two-col,.form-grid{grid-template-columns:1fr}
   .form-field.span2{grid-column:1}
-  header{padding:0 18px}
-  .tab-btn,.atab{font-size:.7rem;padding:8px 6px}
+  header{padding:0 14px;height:56px}
+  main{padding:28px 14px}
+  .intranet-layout{padding:14px;gap:12px;border-radius:12px}
+
+  /* Tabs: auf Mobil horizontal scrollbar */
+  .tab-bar{overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;margin-bottom:18px}
+  .tab-btn{flex:0 0 auto;min-width:122px}
+  .tab-btn,.atab{font-size:.72rem;padding:8px 8px}
+
+  /* Calendar kompakter */
+  .calendar-toolbar{flex-wrap:wrap}
+  .calendar-month{flex:1;text-align:left}
+  .calendar-grid{gap:6px}
+  .cal-day{min-height:80px;padding:8px;border-radius:12px}
+  .calendar-events-list{max-height:320px}
+
+  /* Chat */
+  .chat-window{height:480px}
+}
+
+@media(max-width:420px){
+  .tab-btn{min-width:110px}
+  .chat-window{height:440px}
+  .cal-day{min-height:74px}
 }
 /* PW CHANGE */
 .pw-req{font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.8;padding:10px 14px;border-radius:8px;background:rgba(37,99,235,.05);border:1px solid var(--border)}
