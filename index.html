@@ -61,6 +61,19 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .hbtn.logout:hover{background:rgba(255,80,80,.12);border-color:#ff6b6b;transform:translateY(-1px);box-shadow:none}
 .hbtn.visible{display:flex}
 
+/* Header: Mitarbeiter suchen */
+.header-center{display:none;flex-direction:column;gap:4px;flex:1;min-width:0;max-width:560px;margin:0 12px}
+.header-center.visible{display:flex}
+.header-search-label{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.header-search-row{display:flex;gap:8px;align-items:center;width:100%}
+.header-search-row input{flex:1;min-width:0;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.88rem;outline:none}
+.header-search-row input:focus{border-color:var(--border-accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.header-search-row .sbtn{padding:9px 14px}
+
+.emp-search-dropdown{display:none;position:fixed;top:64px;left:0;right:0;z-index:95;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow-md);max-height:min(55vh,420px);overflow-y:auto;padding:14px 20px}
+.emp-search-dropdown.open{display:block}
+.emp-search-dropdown .emp-list-box{max-height:none}
+
 /* MAIN */
 main{position:relative;z-index:1;display:flex;justify-content:center;align-items:flex-start;min-height:calc(100vh - 64px);padding:40px 20px}
 /* Center login/loading/pwchange vertically */
@@ -307,7 +320,9 @@ textarea{resize:vertical;min-height:80px}
 @media(max-width:700px){
   .two-col,.form-grid{grid-template-columns:1fr}
   .form-field.span2{grid-column:1}
-  header{padding:0 14px;height:56px}
+  header{padding:10px 14px;height:auto;flex-wrap:wrap;align-items:flex-start;gap:8px}
+  .header-center{flex-basis:100%;order:3;margin:4px 0 0;max-width:none}
+  .emp-search-dropdown.open{position:relative;top:auto;left:auto;right:auto;box-shadow:none}
   main{padding:28px 14px}
   .intranet-layout{padding:14px;gap:12px;border-radius:12px}
 
@@ -367,6 +382,13 @@ textarea{resize:vertical;min-height:80px}
 
 <header>
   <div class="logo"><span class="logo-dot"></span>BYOD STUDIOS</div>
+  <div class="header-center" id="headerEmpSearch">
+    <div class="header-search-label">Mitarbeiter suchen</div>
+    <div class="header-search-row">
+      <input type="text" id="searchInput" placeholder="Name, Nr., Telefon, E-Mail …" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();searchEmployees();}">
+      <button type="button" class="sbtn" onclick="searchEmployees()">Suchen</button>
+    </div>
+  </div>
   <div class="header-right">
     <div class="hbadge admin-b" id="adminBadge">Admin</div>
     <div class="hbadge user-b"  id="userBadge">—</div>
@@ -377,6 +399,10 @@ textarea{resize:vertical;min-height:80px}
     </button>
   </div>
 </header>
+
+<div id="empSearchResultsWrap" class="emp-search-dropdown" aria-live="polite">
+  <div class="emp-list-box" id="employeeList"></div>
+</div>
 
 <main>
 
@@ -487,7 +513,6 @@ textarea{resize:vertical;min-height:80px}
     <button class="tab-btn active" onclick="switchTab('overview')">Übersicht</button>
     <button class="tab-btn"        onclick="switchTab('tasks')">Aufgaben</button>
     <button class="tab-btn"        onclick="switchTab('news')">Neuigkeiten</button>
-    <button class="tab-btn"        onclick="switchTab('directory')">Verzeichnis</button>
     <button class="tab-btn"        onclick="switchTab('calendar')">📅 Kalender</button>
     <button class="tab-btn"        onclick="switchTab('chat')" id="chatTabBtn">💬 Chat</button>
   </div>
@@ -525,19 +550,6 @@ textarea{resize:vertical;min-height:80px}
   <div class="tab-panel" id="tab-news">
     <div class="sec-title">Neuigkeiten</div>
     <div class="news-feed" id="newsFeed"></div>
-  </div>
-
-  <!-- Verzeichnis -->
-  <div class="tab-panel" id="tab-directory">
-    <div class="sec-title">Mitarbeiterverzeichnis</div>
-    <div class="card">
-      <div class="search-row">
-        <input type="text" id="searchInput" placeholder="Name, Nr., Telefon, E-Mail …"
-          oninput="searchEmployees()" onkeydown="if(event.key==='Enter')searchEmployees()">
-        <button class="sbtn" onclick="searchEmployees()">Suchen</button>
-      </div>
-      <div class="emp-list-box" id="employeeList"><div class="hint">Suche starten, um Mitarbeiter zu finden</div></div>
-    </div>
   </div>
 
   <!-- Kalender -->
@@ -927,7 +939,9 @@ function logout() {
   hide("dashboardView"); hide("adminPage"); hide("pwChangeView"); hide("intranetLayout");
   ["userBadge","adminBadge","adminPageBtn","logoutBtn"].forEach(id => document.getElementById(id).classList.remove("visible"));
   ["username","password","searchInput","newPw1","newPw2"].forEach(id => document.getElementById(id).value = "");
-  document.getElementById("employeeList").innerHTML = '<div class="hint">Suche starten, um Mitarbeiter zu finden</div>';
+  document.getElementById("headerEmpSearch").classList.remove("visible");
+  document.getElementById("empSearchResultsWrap").classList.remove("open");
+  document.getElementById("employeeList").innerHTML = "";
   switchTab("overview");
   show("loginView", "flex");
 }
@@ -954,14 +968,24 @@ function renderDashboard() {
   document.getElementById("sidebarOrg").textContent  = currentUser.org || "—";
 
   loadApps(); loadNews(); renderTasks(); renderOverviewTasks();
+  document.getElementById("headerEmpSearch").classList.add("visible");
+  document.getElementById("empSearchResultsWrap").classList.remove("open");
+  document.getElementById("employeeList").innerHTML = "";
   show("intranetLayout", "flex");
   show("dashboardView",  "block");
 }
 
-function showDashboardFromAdmin() { hide("adminPage"); show("intranetLayout","flex"); show("dashboardView","block"); }
+function showDashboardFromAdmin() {
+  hide("adminPage");
+  document.getElementById("headerEmpSearch").classList.add("visible");
+  show("intranetLayout","flex");
+  show("dashboardView","block");
+}
 
 async function showAdminPage() {
   hide("dashboardView"); hide("intranetLayout");
+  document.getElementById("headerEmpSearch").classList.remove("visible");
+  document.getElementById("empSearchResultsWrap").classList.remove("open");
   setLoading(true, "Admin-Daten laden …");
   show("adminPage", "none");
   await loadAllData();
@@ -972,7 +996,7 @@ async function showAdminPage() {
 
 /* ═══ TABS ═══ */
 function switchTab(name) {
-  const names = ["overview","tasks","news","directory","calendar","chat"];
+  const names = ["overview","tasks","news","calendar","chat"];
   document.querySelectorAll(".tab-btn").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.getElementById("tab-"+name).classList.add("active");
@@ -1012,16 +1036,23 @@ function loadNews() {
     </div>`).join("") || '<div class="hint">Noch keine News vorhanden</div>';
 }
 
-/* ═══ DIRECTORY ═══ */
+/* ═══ MITARBEITER SUCHE (Header) ═══ */
 function searchEmployees() {
   const val = document.getElementById("searchInput").value.trim().toLowerCase();
   const el  = document.getElementById("employeeList");
-  if (!val) { el.innerHTML = '<div class="hint">Suche starten, um Mitarbeiter zu finden</div>'; return; }
+  const wrap = document.getElementById("empSearchResultsWrap");
+  if (!val) {
+    toast("⚠️ Bitte einen Suchbegriff eingeben", true);
+    wrap.classList.remove("open");
+    el.innerHTML = "";
+    return;
+  }
   const res = allUsers.filter(e =>
     e.vorname.toLowerCase().includes(val) || e.nachname.toLowerCase().includes(val) ||
     e.username.includes(val) || (e.tel||"").includes(val) || (e.email||"").toLowerCase().includes(val) ||
     (e.org||"").toLowerCase().includes(val)
   );
+  wrap.classList.add("open");
   if (!res.length) { el.innerHTML = '<div class="hint">Keine Treffer gefunden</div>'; return; }
   el.innerHTML = res.map(e => `
     <div class="emp-card">
