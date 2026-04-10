@@ -81,11 +81,12 @@ main{position:relative;z-index:1;display:flex;justify-content:center;align-items
 
 /* INTRANET LAYOUT */
 .intranet-layout {
-    display: flex;
+    display: grid;
+    grid-template-columns: 240px 1fr;
     gap: 24px;
     width: 100%;
     max-width: 1200px;
-    align-items: flex-start;
+    align-items: start;
 
     /* Light Theme */
     background-color: var(--bg);
@@ -96,7 +97,7 @@ main{position:relative;z-index:1;display:flex;justify-content:center;align-items
     box-shadow: var(--shadow-sm);
 }
 /* SIDEBAR */
-.sidebar{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;position:sticky;top:88px;animation:fadeUp .5s ease both}
+.sidebar{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;position:sticky;top:88px;animation:fadeUp .5s ease both;align-self:start}
 .sidebar-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-sm)}
 .sidebar-section-title{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .sidebar-contact{display:flex;flex-direction:column;gap:6px}
@@ -113,8 +114,9 @@ main{position:relative;z-index:1;display:flex;justify-content:center;align-items
 .sidebar-quick-link{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.82rem;text-decoration:none;transition:all .2s;cursor:pointer}
 .sidebar-quick-link:hover{border-color:var(--border-accent);background:var(--card-hover);color:var(--accent)}
 
-/* DASHBOARD (flexible width) */
-.dashboard{display:none;flex:1;min-width:0;animation:fadeUp .5s ease both;align-self:flex-start}
+/* DASHBOARD */
+.dashboard{display:none;width:100%;max-width:100%;animation:fadeUp .5s ease both;align-self:start}
+.dashboard[style*="block"]{display:block !important}
 
 /* LOGIN */
 .login-wrap{width:100%;max-width:400px;animation:fadeUp .5s ease both;display:flex;flex-direction:column;align-items:center}
@@ -142,9 +144,8 @@ textarea{resize:vertical;min-height:80px}
 .loader-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .85s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* DASHBOARD */
-.dashboard{display:none;width:100%;max-width:960px;animation:fadeUp .5s ease both;align-self:flex-start}
-.tab-bar{display:flex;gap:4px;margin-bottom:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px}
+
+.tab-bar{display:flex;gap:4px;margin-bottom:28px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px;position:sticky;top:72px;z-index:50;box-shadow:var(--shadow-sm)}
 .tab-btn{flex:1;padding:10px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;width:auto}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04);box-shadow:none;transform:none}
 .tab-btn.active{background:var(--surface);color:var(--accent);border:1px solid var(--border-accent);box-shadow:0 10px 24px rgba(15,23,42,0.08)}
@@ -316,7 +317,7 @@ textarea{resize:vertical;min-height:80px}
 .chat-send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(37,99,235,.26)}
 .chat-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0}
 
-@media(max-width:900px){.sidebar{display:none}}
+@media(max-width:900px){.sidebar{display:none}.intranet-layout{grid-template-columns:1fr}}
 @media(max-width:700px){
   .two-col,.form-grid{grid-template-columns:1fr}
   .form-field.span2{grid-column:1}
@@ -376,6 +377,40 @@ textarea{resize:vertical;min-height:80px}
 .cal-event-actions{display:flex;gap:8px;flex-shrink:0}
 #calendarDayModal{z-index:205}
 #calendarEventModal{z-index:210}
+
+/* SCHWARZES BRETT */
+.bb-feed{display:flex;flex-direction:column;gap:16px}
+.bb-post{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .2s;animation:fadeUp .3s ease both}
+.bb-post:hover{border-color:var(--border-accent);background:var(--card-hover)}
+.bb-post-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bb-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:#fff;flex-shrink:0}
+.bb-meta{flex:1;min-width:0}
+.bb-author{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--text)}
+.bb-time{font-size:.72rem;color:var(--muted);margin-top:2px}
+.bb-delete-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+.bb-delete-btn:hover{border-color:rgba(239,68,68,.4);color:#f87171;background:rgba(239,68,68,.08)}
+.bb-text{font-size:.88rem;color:var(--text);line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.bb-attachments{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.bb-img{max-width:240px;max-height:200px;border-radius:10px;border:1px solid var(--border);object-fit:cover;cursor:pointer;transition:transform .2s}
+.bb-img:hover{transform:scale(1.03)}
+.bb-file-link{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--accent);font-size:.82rem;text-decoration:none;transition:all .2s}
+.bb-file-link:hover{border-color:var(--border-accent);background:var(--card-hover)}
+.bb-compose{background:var(--card);border:1px solid var(--border-accent);border-radius:14px;padding:20px;margin-bottom:20px}
+.bb-compose-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.bb-compose-title::before{content:'';width:3px;height:11px;background:var(--accent);border-radius:2px;display:inline-block}
+.bb-compose textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Calibri','Segoe UI',Arial,sans-serif;font-size:.9rem;min-height:80px;resize:vertical;outline:none;transition:border-color .2s;box-sizing:border-box}
+.bb-compose textarea:focus{border-color:var(--border-accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.bb-compose-footer{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.bb-attach-label{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.bb-attach-label:hover{border-color:var(--border-accent);color:var(--text)}
+.bb-attach-preview{font-size:.78rem;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bb-post-btn{padding:9px 20px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;width:auto;margin-left:auto}
+.bb-post-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.28)}
+.bb-post-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.bb-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:40px 0}
+.bb-lightbox{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.bb-lightbox.open{display:flex}
+.bb-lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
 </style>
 </head>
 <body>
@@ -472,7 +507,7 @@ textarea{resize:vertical;min-height:80px}
           📞 <a href="tel:+4915901993688">+49 1590 1993688</a>
         </div>
         <div class="sidebar-contact-row">
-          ✉️ <a href="mailto:LSchwickert.BYOD@outlook.de">HelpDesk schreiben</a>
+          ✉️ <a href="/cdn-cgi/l/email-protection#753926161d021c161e1007015b372c3a31351a0001191a1a1e5b1110">HelpDesk schreiben</a>
         </div>
       </div>
       <div class="sidebar-divider"></div>
@@ -498,13 +533,6 @@ textarea{resize:vertical;min-height:80px}
       </div>
     </div>
 
-    <div class="sidebar-card">
-      <div class="sidebar-section-title">Schnellzugriff</div>
-      <div onclick="switchTab('tasks')" class="sidebar-quick-link">📋 Meine Aufgaben</div>
-      <div onclick="switchTab('news')"  class="sidebar-quick-link">📰 Neuigkeiten</div>
-      <div onclick="switchTab('calendar')" class="sidebar-quick-link">📅 Kalender</div>
-      <div onclick="switchTab('chat')"  class="sidebar-quick-link">💬 Chat</div>
-    </div>
   </aside>
 
 <!-- Dashboard -->
@@ -514,6 +542,7 @@ textarea{resize:vertical;min-height:80px}
     <button class="tab-btn"        onclick="switchTab('tasks')">Aufgaben</button>
     <button class="tab-btn"        onclick="switchTab('news')">Neuigkeiten</button>
     <button class="tab-btn"        onclick="switchTab('calendar')">📅 Kalender</button>
+    <button class="tab-btn"        onclick="switchTab('board')">📌 Schwarzes Brett</button>
     <button class="tab-btn"        onclick="switchTab('chat')" id="chatTabBtn">💬 Chat</button>
   </div>
 
@@ -565,6 +594,26 @@ textarea{resize:vertical;min-height:80px}
         </div>
       </div>
       <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+  </div>
+
+  <!-- Schwarzes Brett -->
+  <div class="tab-panel" id="tab-board">
+    <div class="sec-title">Schwarzes Brett</div>
+    <div class="bb-compose">
+      <div class="bb-compose-title">Neuen Beitrag erstellen</div>
+      <textarea id="bbText" placeholder="Was möchtest du mitteilen?"></textarea>
+      <div class="bb-compose-footer">
+        <label class="bb-attach-label">
+          📎 Datei / Bild anhängen
+          <input type="file" id="bbFileInput" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" style="display:none" onchange="bbPreviewFiles()">
+        </label>
+        <span class="bb-attach-preview" id="bbFilePreview"></span>
+        <button class="bb-post-btn" id="bbPostBtn" onclick="bbSubmit()">Veröffentlichen →</button>
+      </div>
+    </div>
+    <div class="bb-feed" id="bbFeed">
+      <div class="bb-empty">Wird geladen …</div>
     </div>
   </div>
 
@@ -703,6 +752,10 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
+<!-- Lightbox -->
+<div class="bb-lightbox" id="bbLightbox" onclick="bbCloseLightbox()">
+  <img id="bbLightboxImg" src="" alt="">
+</div>
 </main>
 
 <!-- Task Modal -->
@@ -803,7 +856,7 @@ textarea{resize:vertical;min-height:80px}
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══ SUPABASE ═══ */
 const SUPA_URL = "https://qanouffkmbuugivkjyrv.supabase.co";
 
@@ -830,6 +883,9 @@ let calendarLoaded = false;
 let calendarSubscription = null;
 let calendarCurrentMonth = new Date();
 let calendarSelectedDate = null; // ISO: YYYY-MM-DD
+let bbPosts = [];
+let bbSubscription = null;
+let bbSelectedFiles = [];
 const tagLabels  = { info:"Info", update:"Update", event:"Event", wichtig:"Wichtig" };
 
 /* ═══ INIT ═══ */
@@ -933,6 +989,8 @@ async function loadAllData() {
 function logout() {
   if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null; }
   if (calendarSubscription) { calendarSubscription.unsubscribe(); calendarSubscription = null; }
+  if (bbSubscription) { bbSubscription.unsubscribe(); bbSubscription = null; }
+  bbPosts = []; bbSelectedFiles = [];
   activeChatPartner = null; chatMessages = [];
   currentUser = null; allUsers = []; appLib = []; newsItems = []; tasks = [];
   calendarEvents = []; calendarLoaded = false; calendarSelectedDate = null; calendarCurrentMonth = new Date();
@@ -996,12 +1054,13 @@ async function showAdminPage() {
 
 /* ═══ TABS ═══ */
 function switchTab(name) {
-  const names = ["overview","tasks","news","calendar","chat"];
+  const names = ["overview","tasks","news","calendar","board","chat"];
   document.querySelectorAll(".tab-btn").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.getElementById("tab-"+name).classList.add("active");
   if (name === "chat") initChatTab();
   if (name === "calendar") initCalendarTab();
+  if (name === "board") initBoardTab();
 }
 function switchAdminTab(name) {
   const names = ["employees","apps","news"];
@@ -2055,7 +2114,128 @@ function toast(msg, err=false) {
   el._t = setTimeout(() => el.style.display="none", 3000);
 }
 function show(id, d="block") { document.getElementById(id).style.display = d; }
-function hide(id)            { document.getElementById(id).style.display = "none"; }
+function hide(id) { document.getElementById(id).style.display = "none"; }
+
+/* ═══ SCHWARZES BRETT ═══ */
+async function initBoardTab() {
+  if (!currentUser) return;
+  await loadBoardPosts();
+  ensureBoardRealtime();
+}
+
+async function loadBoardPosts() {
+  const { data, error } = await sb.from("board_posts").select("*").order("created_at", { ascending: false });
+  if (error) { toast("❌ Schwarzes Brett konnte nicht geladen werden", true); return; }
+  bbPosts = data || [];
+  renderBoardFeed();
+}
+
+function ensureBoardRealtime() {
+  if (bbSubscription) return;
+  bbSubscription = sb.channel("board-posts")
+    .on("postgres_changes", { event:"INSERT", schema:"public", table:"board_posts" }, payload => {
+      bbPosts.unshift(payload.new); renderBoardFeed();
+    })
+    .on("postgres_changes", { event:"DELETE", schema:"public", table:"board_posts" }, payload => {
+      bbPosts = bbPosts.filter(p => p.id !== payload.old.id); renderBoardFeed();
+    })
+    .subscribe();
+}
+
+function bbPreviewFiles() {
+  const input = document.getElementById("bbFileInput");
+  bbSelectedFiles = [...input.files];
+  document.getElementById("bbFilePreview").textContent = bbSelectedFiles.map(f => f.name).join(", ");
+}
+
+async function bbSubmit() {
+  const text = document.getElementById("bbText").value.trim();
+  if (!text && bbSelectedFiles.length === 0) { toast("⚠️ Bitte Text oder Datei hinzufügen", true); return; }
+  const btn = document.getElementById("bbPostBtn");
+  btn.disabled = true;
+  const attachments = [];
+  for (const file of bbSelectedFiles) {
+    const path = currentUser.id + "/" + Date.now() + "_" + file.name;
+    const { error: upErr } = await sb.storage.from("board-attachments").upload(path, file, { upsert: false });
+    if (upErr) { toast("❌ Upload fehlgeschlagen: " + upErr.message, true); btn.disabled = false; return; }
+    const { data: urlData } = sb.storage.from("board-attachments").getPublicUrl(path);
+    attachments.push({ name: file.name, url: urlData.publicUrl, type: file.type });
+  }
+  const { error } = await sb.from("board_posts").insert({
+    author_id: currentUser.id,
+    author_name: currentUser.vorname + " " + currentUser.nachname,
+    text: text,
+    attachments: attachments
+  });
+  if (error) { toast("❌ Fehler: " + error.message, true); btn.disabled = false; return; }
+  document.getElementById("bbText").value = "";
+  document.getElementById("bbFilePreview").textContent = "";
+  document.getElementById("bbFileInput").value = "";
+  bbSelectedFiles = [];
+  btn.disabled = false;
+  toast("✅ Beitrag veröffentlicht");
+}
+
+async function bbDeletePost(id) {
+  if (!confirm("Beitrag wirklich löschen?")) return;
+  const { error } = await sb.from("board_posts").delete().eq("id", id);
+  if (error) { toast("❌ Fehler: " + error.message, true); return; }
+  bbPosts = bbPosts.filter(p => p.id !== id);
+  renderBoardFeed();
+  toast("✅ Beitrag gelöscht");
+}
+
+function renderBoardFeed() {
+  const el = document.getElementById("bbFeed");
+  if (!el) return;
+  if (!bbPosts.length) {
+    el.innerHTML = '<div class="bb-empty">Noch keine Beiträge – schreib den ersten! 📌</div>';
+    return;
+  }
+  el.innerHTML = bbPosts.map((p, i) => {
+    const initials = (p.author_name || "?").split(" ").map(w => w[0]||"").slice(0,2).join("").toUpperCase();
+    const canDelete = currentUser && (currentUser.admin || currentUser.id === p.author_id);
+    const deleteBtn = canDelete ? `<button class="bb-delete-btn" onclick="bbDeletePost('${p.id}')" title="Löschen">🗑</button>` : "";
+    const atts = p.attachments || [];
+    const attHtml = atts.map(a => {
+      const isImg = a.type && a.type.startsWith("image/");
+      if (isImg) return `<img class="bb-img" src="${a.url}" alt="${escHtml(a.name)}" onclick="bbOpenLightbox('${a.url}')">`;
+      return `<a class="bb-file-link" href="${a.url}" target="_blank" rel="noopener">📄 ${escHtml(a.name)}</a>`;
+    }).join("");
+    const timeStr = bbFmtTime(p.created_at);
+    return `<div class="bb-post" style="animation-delay:${i*.05}s">
+      <div class="bb-post-header">
+        <div class="bb-avatar">${initials}</div>
+        <div class="bb-meta">
+          <div class="bb-author">${escHtml(p.author_name)}</div>
+          <div class="bb-time">${timeStr}</div>
+        </div>
+        ${deleteBtn}
+      </div>
+      ${p.text ? `<div class="bb-text">${escHtml(p.text)}</div>` : ""}
+      ${atts.length ? `<div class="bb-attachments">${attHtml}</div>` : ""}
+    </div>`;
+  }).join("");
+}
+
+function bbFmtTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const today = new Date();
+  const hhmm = d.toLocaleTimeString("de-DE", { hour:"2-digit", minute:"2-digit" });
+  if (d.toDateString() === today.toDateString()) return "Heute, " + hhmm;
+  return d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + ", " + hhmm;
+}
+
+function bbOpenLightbox(url) {
+  document.getElementById("bbLightboxImg").src = url;
+  document.getElementById("bbLightbox").classList.add("open");
+}
+
+function bbCloseLightbox() {
+  document.getElementById("bbLightbox").classList.remove("open");
+  document.getElementById("bbLightboxImg").src = "";
+}
 </script>
 </body>
 </html>
