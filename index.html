@@ -378,6 +378,20 @@ textarea{resize:vertical;min-height:80px}
 #calendarDayModal{z-index:205}
 #calendarEventModal{z-index:210}
 
+
+/* NOTIFICATIONS */
+.notif-dot{position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:#f87171;border:2px solid var(--card);display:none}
+.notif-dot.visible{display:block}
+.tab-btn{position:relative}
+.notif-banner{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:400;display:flex;align-items:center;gap:12px;padding:13px 22px;border-radius:14px;background:var(--card);border:1px solid var(--border-accent);box-shadow:0 8px 32px rgba(37,99,235,.18);font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--text);min-width:280px;max-width:480px;animation:fadeUp .3s ease both;cursor:pointer}
+.notif-banner:hover{box-shadow:0 12px 40px rgba(37,99,235,.25)}
+.notif-banner-icon{font-size:1.3rem;flex-shrink:0}
+.notif-banner-body{flex:1;min-width:0}
+.notif-banner-title{font-size:.88rem;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notif-banner-sub{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Calibri','Segoe UI',Arial,sans-serif;font-weight:400}
+.notif-banner-close{width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+.notif-banner-close:hover{border-color:var(--border-accent);color:var(--text)}
+
 /* SCHWARZES BRETT */
 .bb-feed{display:flex;flex-direction:column;gap:16px}
 .bb-post{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .2s;animation:fadeUp .3s ease both}
@@ -659,6 +673,7 @@ textarea{resize:vertical;min-height:80px}
     <button class="atab active" onclick="switchAdminTab('employees')">👥 Mitarbeiter</button>
     <button class="atab"        onclick="switchAdminTab('apps')">🧩 Apps</button>
     <button class="atab"        onclick="switchAdminTab('news')">📰 News</button>
+    <button class="atab"        onclick="switchAdminTab('notif')">🔔 Push</button>
   </div>
 
   <!-- Mitarbeiter -->
@@ -750,6 +765,56 @@ textarea{resize:vertical;min-height:80px}
     <div class="sec-title">Veröffentlichte News</div>
     <div id="newsAdminList"></div>
   </div>
+
+  <!-- Push-Benachrichtigungen -->
+  <div class="apanel" id="apanel-notif">
+    <div class="form-card">
+      <div class="form-card-title">🔔 Push-Benachrichtigung senden</div>
+      <div class="form-grid one">
+        <div class="form-field">
+          <label class="flabel">Titel</label>
+          <input id="pn-titel" placeholder="z. B. Wichtige Info für alle">
+        </div>
+        <div class="form-field">
+          <label class="flabel">Nachricht</label>
+          <textarea id="pn-text" placeholder="Text der Benachrichtigung …"></textarea>
+        </div>
+        <div class="form-field">
+          <label class="flabel">Kategorie</label>
+          <select id="pn-type">
+            <option value="info">ℹ️ Info</option>
+            <option value="chat">💬 Chat</option>
+            <option value="task">✅ Aufgabe</option>
+            <option value="news">📰 News</option>
+            <option value="calendar">📅 Kalender</option>
+            <option value="board">📌 Schwarzes Brett</option>
+            <option value="app">🧩 App</option>
+            <option value="wichtig">⚠️ Wichtig</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <button class="btn-purple" id="pnSendBtn" onclick="adminSendPush()">
+          🔔 <span id="pnSendLabel">Benachrichtigung senden</span>
+        </button>
+      </div>
+    </div>
+    <div class="form-card" style="margin-top:0">
+      <div class="form-card-title">📋 Geräte mit Push-Erlaubnis</div>
+      <div id="pnDeviceList"><div class="hint">Wird geladen …</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- In-App Notification Banner -->
+<div class="notif-banner" id="notifBanner" style="display:none" onclick="notifBannerClick()">
+  <div class="notif-banner-icon" id="notifBannerIcon">🔔</div>
+  <div class="notif-banner-body">
+    <div class="notif-banner-title" id="notifBannerTitle">Neue Benachrichtigung</div>
+    <div class="notif-banner-sub"  id="notifBannerSub"></div>
+  </div>
+  <button class="notif-banner-close" onclick="event.stopPropagation();hideNotifBanner()">✕</button>
 </div>
 
 <!-- Lightbox -->
@@ -990,6 +1055,7 @@ function logout() {
   if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null; }
   if (calendarSubscription) { calendarSubscription.unsubscribe(); calendarSubscription = null; }
   if (bbSubscription) { bbSubscription.unsubscribe(); bbSubscription = null; }
+  if (notifSubscription) { notifSubscription.unsubscribe(); notifSubscription = null; }
   bbPosts = []; bbSelectedFiles = [];
   activeChatPartner = null; chatMessages = [];
   currentUser = null; allUsers = []; appLib = []; newsItems = []; tasks = [];
@@ -1025,7 +1091,7 @@ function renderDashboard() {
   document.getElementById("sidebarPnr").textContent  = currentUser.username;
   document.getElementById("sidebarOrg").textContent  = currentUser.org || "—";
 
-  loadApps(); loadNews(); renderTasks(); renderOverviewTasks();
+  loadApps(); loadNews(); renderTasks(); renderOverviewTasks(); initNotifications();
   document.getElementById("headerEmpSearch").classList.add("visible");
   document.getElementById("empSearchResultsWrap").classList.remove("open");
   document.getElementById("employeeList").innerHTML = "";
@@ -1063,10 +1129,11 @@ function switchTab(name) {
   if (name === "board") initBoardTab();
 }
 function switchAdminTab(name) {
-  const names = ["employees","apps","news"];
+  const names = ["employees","apps","news","notif"];
   document.querySelectorAll(".atab").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".apanel").forEach(p => p.classList.remove("active"));
   document.getElementById("apanel-"+name).classList.add("active");
+  if (name==="notif") loadPnDeviceList();
 }
 
 /* ═══ APPS ═══ */
@@ -1470,6 +1537,7 @@ async function saveCalendarEvent() {
     calendarEvents.push(inserted);
     sortCalendarEvents(calendarEvents);
     toast("✅ Event erstellt");
+    await notifyAll('calendar', '📅 Neues Kalenderevent', calTitle);
   }
 
   calendarSelectedDate = date;
@@ -1639,6 +1707,7 @@ async function saveTask() {
     if (error) { toast("❌ Fehler beim Erstellen", true); setBtnLoading("taskSaveBtn", false); return; }
     tasks.unshift(inserted);
     toast("✅ Aufgabe erstellt");
+    await notifyAll('task', '✅ Neue Aufgabe', inserted.titel);
   }
   setBtnLoading("taskSaveBtn", false);
   closeTaskModal(); renderTasks(); renderOverviewTasks();
@@ -1896,6 +1965,7 @@ async function saveNews() {
     const { data, error } = await sb.from("news").insert({ titel, text, tag, datum }).select().single();
     if (error) { toast("❌ Fehler: "+error.message, true); setBtnLoading("newsSaveBtn", false); return; }
     newsItems.unshift(data); toast("✅ News veröffentlicht"); clearNewsForm();
+    await notifyAll('news', '📰 Neue News', titel);
   }
   setBtnLoading("newsSaveBtn", false);
   renderNewsAdminList(); loadNews();
@@ -2050,7 +2120,9 @@ async function sendMessage() {
     receiver_id: activeChatPartner.id,
     text
   });
-  if (error) toast("❌ Nachricht konnte nicht gesendet werden", true);
+  if (error) { toast("❌ Nachricht konnte nicht gesendet werden", true); return; }
+  // Notification an Empfänger
+  await sb.from('notifications').insert({ user_id: activeChatPartner.id, title: '💬 Neue Nachricht von ' + currentUser.vorname + ' ' + currentUser.nachname, body: text.slice(0,80), type: 'chat', sent_by: currentUser.id });
 }
 
 /* Nachrichten rendern */
@@ -2113,6 +2185,167 @@ function toast(msg, err=false) {
   clearTimeout(el._t);
   el._t = setTimeout(() => el.style.display="none", 3000);
 }
+
+/* ═══ PUSH / BENACHRICHTIGUNGEN ═══ */
+const NOTIF_ICONS = {
+  chat:'💬', task:'✅', news:'📰', calendar:'📅',
+  board:'📌', app:'🧩', wichtig:'⚠️', info:'ℹ️'
+};
+let notifSubscription = null;
+let notifBannerTimer  = null;
+
+/* Beim Dashboard-Start: Push-Permission anfragen + abonnieren */
+async function initNotifications() {
+  if (!currentUser) return;
+
+  // Gerät registrieren (VAPID-less: wir speichern nur user_id + device-info)
+  await registerDevice();
+
+  // Realtime: neue Notifications aus Supabase empfangen
+  ensureNotifRealtime();
+}
+
+async function registerDevice() {
+  // Browser-Push-Permission anfragen
+  if ('Notification' in window && Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+
+  const info = {
+    user_id:    currentUser.id,
+    user_name:  currentUser.vorname + ' ' + currentUser.nachname,
+    user_agent: navigator.userAgent.slice(0, 200),
+    push_ok:    ('Notification' in window && Notification.permission === 'granted'),
+    last_seen:  new Date().toISOString()
+  };
+
+  // Upsert: ein Eintrag pro user (einfachstes Modell ohne VAPID)
+  await sb.from('push_devices').upsert(info, { onConflict: 'user_id' });
+}
+
+function ensureNotifRealtime() {
+  if (notifSubscription) return;
+  notifSubscription = sb.channel('notifications-' + currentUser.id)
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public', table: 'notifications',
+      filter: `user_id=eq.${currentUser.id}`
+    }, payload => {
+      handleIncomingNotif(payload.new);
+    })
+    .subscribe();
+
+  // Globale Notifications (user_id IS NULL = für alle)
+  sb.channel('notifications-global')
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public', table: 'notifications',
+      filter: 'user_id=is.null'
+    }, payload => {
+      handleIncomingNotif(payload.new);
+    })
+    .subscribe();
+}
+
+function handleIncomingNotif(n) {
+  if (!n) return;
+  const icon  = NOTIF_ICONS[n.type] || '🔔';
+  const title = n.title  || 'Neue Benachrichtigung';
+  const body  = n.body   || '';
+
+  // 1) In-App Banner
+  showNotifBanner(icon, title, body, n.type);
+
+  // 2) Browser Push (wenn Seite im Hintergrund oder Permission granted)
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(title, {
+        body,
+        icon: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>' + icon + '</text></svg>'
+      });
+    } catch(e) {}
+  }
+}
+
+function showNotifBanner(icon, title, sub, type) {
+  document.getElementById('notifBannerIcon').textContent  = icon;
+  document.getElementById('notifBannerTitle').textContent = title;
+  document.getElementById('notifBannerSub').textContent   = sub;
+  document.getElementById('notifBanner').dataset.type     = type || '';
+  document.getElementById('notifBanner').style.display    = 'flex';
+  clearTimeout(notifBannerTimer);
+  notifBannerTimer = setTimeout(hideNotifBanner, 6000);
+}
+
+function hideNotifBanner() {
+  document.getElementById('notifBanner').style.display = 'none';
+}
+
+function notifBannerClick() {
+  const type = document.getElementById('notifBanner').dataset.type;
+  hideNotifBanner();
+  const tabMap = { chat:'chat', task:'tasks', news:'news', calendar:'calendar', board:'board', app:'overview' };
+  const tab = tabMap[type] || 'overview';
+  switchTab(tab);
+  document.querySelector('.tab-btn[onclick*="' + tab + '"]')?.click();
+}
+
+/* Admin: Push an alle senden */
+async function adminSendPush() {
+  const titel = document.getElementById('pn-titel').value.trim();
+  const text  = document.getElementById('pn-text').value.trim();
+  const type  = document.getElementById('pn-type').value;
+  if (!titel || !text) { toast('⚠️ Bitte Titel und Nachricht ausfüllen', true); return; }
+
+  setBtnLoading('pnSendBtn', true);
+
+  // Eintrag ohne user_id = geht an alle (global)
+  const { error } = await sb.from('notifications').insert({
+    user_id: null,
+    title:   titel,
+    body:    text,
+    type:    type,
+    sent_by: currentUser.id
+  });
+
+  setBtnLoading('pnSendBtn', false);
+
+  if (error) { toast('❌ Fehler: ' + error.message, true); return; }
+  document.getElementById('pn-titel').value = '';
+  document.getElementById('pn-text').value  = '';
+  toast('✅ Benachrichtigung gesendet!');
+}
+
+/* Admin: Geräteliste laden */
+async function loadPnDeviceList() {
+  const el = document.getElementById('pnDeviceList');
+  if (!el) return;
+  const { data, error } = await sb.from('push_devices').select('*').order('last_seen', { ascending: false });
+  if (error || !data || !data.length) {
+    el.innerHTML = '<div class="hint">Noch keine Geräte registriert</div>'; return;
+  }
+  el.innerHTML = data.map(d => {
+    const ua    = d.user_agent || '—';
+    const short = ua.length > 60 ? ua.slice(0,60)+'…' : ua;
+    const seen  = d.last_seen ? fmtTime(d.last_seen) : '—';
+    const pushOk = d.push_ok
+      ? '<span style="color:#4ade80;font-weight:700">✅ Push erlaubt</span>'
+      : '<span style="color:#f87171;font-weight:700">❌ Push blockiert</span>';
+    return `<div class="admin-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+      <div style="display:flex;align-items:center;gap:10px;width:100%">
+        <div class="admin-row-name" style="flex:1">${escHtml(d.user_name || '—')}</div>
+        ${pushOk}
+      </div>
+      <div class="admin-row-sub" style="font-size:.75rem">${escHtml(short)}</div>
+      <div class="admin-row-sub" style="font-size:.72rem">Zuletzt aktiv: ${seen}</div>
+    </div>`;
+  }).join('');
+}
+
+/* Automatische Notifications bei Ereignissen */
+async function notifyAll(type, title, body) {
+  // Fügt global notification ein (user_id = null → alle empfangen)
+  await sb.from('notifications').insert({ user_id: null, title, body, type, sent_by: currentUser?.id || null });
+}
+
 function show(id, d="block") { document.getElementById(id).style.display = d; }
 function hide(id) { document.getElementById(id).style.display = "none"; }
 
@@ -2174,6 +2407,7 @@ async function bbSubmit() {
   bbSelectedFiles = [];
   btn.disabled = false;
   toast("✅ Beitrag veröffentlicht");
+  await notifyAll('board', '📌 Schwarzes Brett', (currentUser.vorname + ' ' + currentUser.nachname + ': ' + text).slice(0,80));
 }
 
 async function bbDeletePost(id) {
