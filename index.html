@@ -392,6 +392,34 @@ textarea{resize:vertical;min-height:80px}
 .notif-banner-close{width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
 .notif-banner-close:hover{border-color:var(--border-accent);color:var(--text)}
 
+
+/* STUNDENZETTEL */
+.ts-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.ts-month-nav{display:flex;align-items:center;gap:8px}
+.ts-month-label{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--text);min-width:120px;text-align:center}
+.ts-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.ts-sum-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center}
+.ts-sum-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)}
+.ts-sum-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.ts-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.ts-table th{font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left}
+.ts-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.ts-table tr:last-child td{border-bottom:none}
+.ts-table tr:hover td{background:var(--card-hover)}
+.ts-status{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700}
+.ts-status.ok{background:rgba(34,197,94,.12);color:#4ade80}
+.ts-status.missing{background:rgba(239,68,68,.12);color:#f87171}
+.ts-status.late{background:rgba(251,191,36,.12);color:#fbbf24}
+.ts-add-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:16px;background:var(--surface);border:1px solid var(--border-accent);border-radius:12px;margin-bottom:16px}
+.ts-add-row .form-field{margin:0;flex:1;min-width:120px}
+.ts-emp-select{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.ts-emp-select select{max-width:260px}
+.ts-section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--accent);margin:20px 0 10px;display:flex;align-items:center;gap:7px}
+.ts-section-title::before{content:'';width:3px;height:11px;background:var(--accent);border-radius:2px;display:inline-block}
+.ts-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:32px 0}
+.ts-export-btn{padding:8px 16px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s;width:auto;display:inline-flex;align-items:center;gap:6px}
+.ts-export-btn:hover{border-color:var(--border-accent);color:var(--accent)}
+
 /* SCHWARZES BRETT */
 .bb-feed{display:flex;flex-direction:column;gap:16px}
 .bb-post{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .2s;animation:fadeUp .3s ease both}
@@ -521,7 +549,7 @@ textarea{resize:vertical;min-height:80px}
           📞 <a href="tel:+4915901993688">+49 1590 1993688</a>
         </div>
         <div class="sidebar-contact-row">
-          ✉️ <a href="/cdn-cgi/l/email-protection#753926161d021c161e1007015b372c3a31351a0001191a1a1e5b1110">HelpDesk schreiben</a>
+          ✉️ <a href="mailto:LSchwickert.BYOD@outlook.de">HelpDesk schreiben</a>
         </div>
       </div>
       <div class="sidebar-divider"></div>
@@ -557,6 +585,7 @@ textarea{resize:vertical;min-height:80px}
     <button class="tab-btn"        onclick="switchTab('news')">Neuigkeiten</button>
     <button class="tab-btn"        onclick="switchTab('calendar')">📅 Kalender</button>
     <button class="tab-btn"        onclick="switchTab('board')">📌 Schwarzes Brett</button>
+    <button class="tab-btn"        onclick="switchTab('timesheet')">🕐 Stundenzettel</button>
     <button class="tab-btn"        onclick="switchTab('chat')" id="chatTabBtn">💬 Chat</button>
   </div>
 
@@ -608,6 +637,92 @@ textarea{resize:vertical;min-height:80px}
         </div>
       </div>
       <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+  </div>
+
+  <!-- Stundenzettel -->
+  <div class="tab-panel" id="tab-timesheet">
+
+    <!-- Admin: Mitarbeiter wählen -->
+    <div id="tsAdminEmpRow" style="display:none">
+      <div class="ts-section-title">Mitarbeiter</div>
+      <div class="ts-emp-select">
+        <select id="tsEmpSelect" onchange="tsLoadForUser()" style="flex:1;max-width:280px"></select>
+      </div>
+    </div>
+
+    <!-- Monats-Navigation -->
+    <div class="ts-toolbar">
+      <div class="ts-month-nav">
+        <button class="icon-btn" onclick="tsPrevMonth()">←</button>
+        <div class="ts-month-label" id="tsMonthLabel">—</div>
+        <button class="icon-btn" onclick="tsNextMonth()">→</button>
+      </div>
+      <button class="ts-export-btn" onclick="tsExportCSV()">⬇ CSV Export</button>
+    </div>
+
+    <!-- Zusammenfassung -->
+    <div class="ts-summary">
+      <div class="ts-sum-card">
+        <div class="ts-sum-val" id="tsTotalHours">0,0</div>
+        <div class="ts-sum-label">Stunden gesamt</div>
+      </div>
+      <div class="ts-sum-card">
+        <div class="ts-sum-val" id="tsTotalDays">0</div>
+        <div class="ts-sum-label">Arbeitstage</div>
+      </div>
+      <div class="ts-sum-card">
+        <div class="ts-sum-val" id="tsAvgHours">0,0</div>
+        <div class="ts-sum-label">Ø Stunden/Tag</div>
+      </div>
+    </div>
+
+    <!-- Eintrag hinzufügen -->
+    <div class="ts-section-title">Eintrag hinzufügen</div>
+    <div class="ts-add-row">
+      <div class="form-field">
+        <label class="flabel">Datum</label>
+        <input type="date" id="tsDate">
+      </div>
+      <div class="form-field">
+        <label class="flabel">Beginn</label>
+        <input type="time" id="tsStart" value="08:00">
+      </div>
+      <div class="form-field">
+        <label class="flabel">Ende</label>
+        <input type="time" id="tsEnd" value="17:00">
+      </div>
+      <div class="form-field">
+        <label class="flabel">Pause (Min.)</label>
+        <input type="number" id="tsBreak" value="30" min="0" max="240" style="max-width:90px">
+      </div>
+      <div class="form-field">
+        <label class="flabel">Notiz (optional)</label>
+        <input type="text" id="tsNote" placeholder="z. B. Homeoffice …">
+      </div>
+      <button class="btn-add" id="tsAddBtn" onclick="tsAddEntry()" style="margin-bottom:1px;flex-shrink:0">＋ Speichern</button>
+    </div>
+
+    <!-- Tabelle -->
+    <div class="ts-section-title">Einträge</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="ts-table">
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Beginn</th>
+            <th>Ende</th>
+            <th>Pause</th>
+            <th>Stunden</th>
+            <th>Notiz</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tsTableBody">
+          <tr><td colspan="8" class="ts-empty">Wird geladen …</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -921,7 +1036,7 @@ textarea{resize:vertical;min-height:80px}
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ═══ SUPABASE ═══ */
 const SUPA_URL = "https://qanouffkmbuugivkjyrv.supabase.co";
 
@@ -986,7 +1101,7 @@ async function login() {
     return;
   }
 
-  setLoading(true, "Daten werden geladen …", "Fast fertig");
+  setLoading(true, "Willkommen, " + user.vorname + " " + user.nachname + "!", "Benutzerprofil wird geladen …");
   await loadAllData();
   setLoading(false);
   renderDashboard();
@@ -1031,7 +1146,7 @@ async function submitNewPw() {
   currentUser.password = pw1;
   currentUser.muss_pw_aendern = false;
 
-  setLoading(true, "Daten werden geladen …", "Fast fertig");
+  setLoading(true, "Willkommen, " + currentUser.vorname + " " + currentUser.nachname + "!", "Benutzerprofil wird geladen …");
   await loadAllData();
   setLoading(false);
   toast("✅ Passwort erfolgreich gesetzt!");
@@ -1057,6 +1172,7 @@ function logout() {
   if (bbSubscription) { bbSubscription.unsubscribe(); bbSubscription = null; }
   if (notifSubscription) { notifSubscription.unsubscribe(); notifSubscription = null; }
   bbPosts = []; bbSelectedFiles = [];
+  tsEntries = []; tsCurrentMonth = new Date();
   activeChatPartner = null; chatMessages = [];
   currentUser = null; allUsers = []; appLib = []; newsItems = []; tasks = [];
   calendarEvents = []; calendarLoaded = false; calendarSelectedDate = null; calendarCurrentMonth = new Date();
@@ -1120,13 +1236,14 @@ async function showAdminPage() {
 
 /* ═══ TABS ═══ */
 function switchTab(name) {
-  const names = ["overview","tasks","news","calendar","board","chat"];
+  const names = ["overview","tasks","news","calendar","board","timesheet","chat"];
   document.querySelectorAll(".tab-btn").forEach((b,i) => b.classList.toggle("active", names[i]===name));
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.getElementById("tab-"+name).classList.add("active");
   if (name === "chat") initChatTab();
   if (name === "calendar") initCalendarTab();
   if (name === "board") initBoardTab();
+  if (name === "timesheet") initTimesheetTab();
 }
 function switchAdminTab(name) {
   const names = ["employees","apps","news","notif"];
@@ -2348,6 +2465,182 @@ async function notifyAll(type, title, body) {
 
 function show(id, d="block") { document.getElementById(id).style.display = d; }
 function hide(id) { document.getElementById(id).style.display = "none"; }
+
+
+/* ═══ STUNDENZETTEL ═══ */
+let tsEntries        = [];
+let tsCurrentMonth   = new Date();
+let tsViewUserId     = null; // null = currentUser
+
+async function initTimesheetTab() {
+  if (!currentUser) return;
+  tsViewUserId = currentUser.id;
+
+  // Admin: Mitarbeiter-Auswahl einblenden
+  const adminRow = document.getElementById('tsAdminEmpRow');
+  if (currentUser.admin) {
+    adminRow.style.display = 'block';
+    const sel = document.getElementById('tsEmpSelect');
+    sel.innerHTML = allUsers.map(u =>
+      `<option value="${u.id}" ${u.id===currentUser.id?'selected':''}>${u.vorname} ${u.nachname}</option>`
+    ).join('');
+    tsViewUserId = sel.value;
+  } else {
+    adminRow.style.display = 'none';
+  }
+
+  // Datum-Feld auf heute setzen
+  document.getElementById('tsDate').value = new Date().toISOString().slice(0,10);
+
+  tsRenderMonth();
+  await tsLoad();
+}
+
+async function tsLoadForUser() {
+  tsViewUserId = document.getElementById('tsEmpSelect').value;
+  await tsLoad();
+}
+
+async function tsLoad() {
+  const y = tsCurrentMonth.getFullYear();
+  const m = String(tsCurrentMonth.getMonth()+1).padStart(2,'0');
+  const from = `${y}-${m}-01`;
+  const to   = `${y}-${m}-31`;
+
+  const { data, error } = await sb.from('timesheets')
+    .select('*')
+    .eq('user_id', tsViewUserId)
+    .gte('date', from)
+    .lte('date', to)
+    .order('date', { ascending: true });
+
+  if (error) { toast('❌ Stundenzettel konnte nicht geladen werden: ' + error.message, true); return; }
+  tsEntries = data || [];
+  tsRender();
+}
+
+function tsPrevMonth() {
+  tsCurrentMonth = new Date(tsCurrentMonth.getFullYear(), tsCurrentMonth.getMonth()-1, 1);
+  tsRenderMonth(); tsLoad();
+}
+function tsNextMonth() {
+  tsCurrentMonth = new Date(tsCurrentMonth.getFullYear(), tsCurrentMonth.getMonth()+1, 1);
+  tsRenderMonth(); tsLoad();
+}
+
+function tsRenderMonth() {
+  const label = tsCurrentMonth.toLocaleDateString('de-DE', { month:'long', year:'numeric' });
+  document.getElementById('tsMonthLabel').textContent = label;
+}
+
+function tsCalcHours(start, end, breakMin) {
+  if (!start || !end) return 0;
+  const [sh,sm] = start.split(':').map(Number);
+  const [eh,em] = end.split(':').map(Number);
+  const totalMin = (eh*60+em) - (sh*60+sm) - (breakMin||0);
+  return Math.max(0, totalMin/60);
+}
+
+function tsStatusBadge(hours) {
+  if (hours >= 8)  return '<span class="ts-status ok">✓ Vollzeit</span>';
+  if (hours >= 4)  return '<span class="ts-status late">◑ Teilzeit</span>';
+  return '<span class="ts-status missing">✗ Kurz</span>';
+}
+
+function tsRender() {
+  const tbody = document.getElementById('tsTableBody');
+  if (!tsEntries.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="ts-empty">Keine Einträge für diesen Monat</td></tr>';
+    document.getElementById('tsTotalHours').textContent = '0,0';
+    document.getElementById('tsTotalDays').textContent  = '0';
+    document.getElementById('tsAvgHours').textContent   = '0,0';
+    return;
+  }
+
+  let totalH = 0;
+  tbody.innerHTML = tsEntries.map(e => {
+    const h = tsCalcHours(e.time_start, e.time_end, e.break_min);
+    totalH += h;
+    const dateStr = e.date ? fmtD(e.date) : '—';
+    const canEdit = currentUser && (currentUser.admin || currentUser.id === e.user_id);
+    const delBtn  = canEdit
+      ? `<button class="icon-btn del" onclick="tsDeleteEntry('${e.id}')">🗑</button>` : '';
+    return `<tr>
+      <td style="font-family:'Syne',sans-serif;font-weight:700">${dateStr}</td>
+      <td>${e.time_start||'—'}</td>
+      <td>${e.time_end||'—'}</td>
+      <td>${e.break_min||0} Min.</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent)">${h.toFixed(1).replace('.',',')} h</td>
+      <td style="color:var(--muted);font-size:.8rem">${escHtml(e.note||'')}</td>
+      <td>${tsStatusBadge(h)}</td>
+      <td>${delBtn}</td>
+    </tr>`;
+  }).join('');
+
+  const days = tsEntries.length;
+  const avg  = days ? totalH/days : 0;
+  document.getElementById('tsTotalHours').textContent = totalH.toFixed(1).replace('.',',');
+  document.getElementById('tsTotalDays').textContent  = days;
+  document.getElementById('tsAvgHours').textContent   = avg.toFixed(1).replace('.',',');
+}
+
+async function tsAddEntry() {
+  const date     = document.getElementById('tsDate').value;
+  const start    = document.getElementById('tsStart').value;
+  const end      = document.getElementById('tsEnd').value;
+  const breakMin = parseInt(document.getElementById('tsBreak').value) || 0;
+  const note     = document.getElementById('tsNote').value.trim();
+
+  if (!date || !start || !end) { toast('⚠️ Bitte Datum, Beginn und Ende ausfüllen', true); return; }
+  if (start >= end) { toast('⚠️ Endzeit muss nach Beginn liegen', true); return; }
+
+  // Wer wird eingetragen: Admin kann für gewählten MA eintragen
+  const targetId = (currentUser.admin && tsViewUserId) ? tsViewUserId : currentUser.id;
+
+  setBtnLoading('tsAddBtn', true);
+  const { error } = await sb.from('timesheets').insert({
+    user_id:    targetId,
+    date,
+    time_start: start,
+    time_end:   end,
+    break_min:  breakMin,
+    note
+  });
+  setBtnLoading('tsAddBtn', false);
+
+  if (error) { toast('❌ Fehler: ' + error.message, true); return; }
+  toast('✅ Eintrag gespeichert');
+  document.getElementById('tsNote').value = '';
+  await tsLoad();
+}
+
+async function tsDeleteEntry(id) {
+  if (!confirm('Eintrag wirklich löschen?')) return;
+  const { error } = await sb.from('timesheets').delete().eq('id', id);
+  if (error) { toast('❌ Fehler: ' + error.message, true); return; }
+  tsEntries = tsEntries.filter(e => e.id !== id);
+  tsRender();
+  toast('✅ Eintrag gelöscht');
+}
+
+function tsExportCSV() {
+  if (!tsEntries.length) { toast('⚠️ Keine Einträge zum Exportieren', true); return; }
+  const u = allUsers.find(x => x.id === tsViewUserId);
+  const name = u ? u.vorname + '_' + u.nachname : 'Mitarbeiter';
+  const month = tsCurrentMonth.toLocaleDateString('de-DE', { month:'long', year:'numeric' });
+
+  let csv = 'Datum;Beginn;Ende;Pause (Min.);Stunden;Notiz\n';
+  tsEntries.forEach(e => {
+    const h = tsCalcHours(e.time_start, e.time_end, e.break_min);
+    csv += [fmtD(e.date), e.time_start||'', e.time_end||'', e.break_min||0, h.toFixed(2).replace('.',','), e.note||''].join(';') + '\n';
+  });
+
+  const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `Stundenzettel_${name}_${month}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
 
 /* ═══ SCHWARZES BRETT ═══ */
 async function initBoardTab() {
